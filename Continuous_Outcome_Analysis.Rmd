@@ -68,7 +68,7 @@ RiskAll = Total number of persons at risk of being a primary or secondary case
 
 ```{r createvar}
 
-noro_add_new_var <- raw_noro_data %>% dplyr::mutate(fracinf = CasesAll/RiskAll)*100
+noro_add_new_var <- raw_noro_data %>% dplyr::mutate(fracinf = (CasesAll/RiskAll)*100)
 
 head(noro_add_new_var$RateAll)
 head(noro_add_new_var$fracinf)
@@ -105,8 +105,6 @@ First, create a plot that lets you quickly see if/how the variables differ.
 
 ```{r checkoutcome}
 
-#THIS IS NOT RIGHT? I THINK?-Try AGAIN LATER
-
 noro_add_new_var %>% ggplot(aes(x = RateAll)) + geom_density()
 noro_add_new_var %>% ggplot(aes(x = fracinf)) + geom_density()
 
@@ -114,17 +112,19 @@ noro_add_new_var %>% ggplot(aes(x = fracinf)) + geom_density()
 
 noro_add_new_var %>% ggplot(aes(x = fracinf, y = RateAll)) + geom_point()
 
-noro_add_new_var %>% ggplot(aes(x = RateAll - fracinf)) + geom_density()
+noro_add_new_var %>% ggplot(aes(x = RateAll - fracinf, y = fracinf)) + geom_point()
 
 # Plot one variable on the x axis, the other on the y axis
-# also plot the difference of the 2 variables
+# also plot the difference of the 2 variables-What Kind of plot? Point or Density?
 # make sure you adjust so both are in the same units#######NOT SURE WHAT THIS MEANS, RECHECK#########
 ```
 
 Both ways of plotting the data show that for most outbreaks, the two ways of getting the outcome agree. So that's good. But we need to look closer and resolve the problem with infinite values above. Check to see what the `RateAll` variable has for those infinite values.
 
 ```{r infvalues}
-subset(noro_add_new_var$RateAll, noro_add_new_var$fracinf == "inf")
+infinity_subset <- subset(noro_add_new_var, fracinf == "Inf")
+
+print(infinity_subset$RateAll)
 
 #Write code that looks at the values of RateAll where we have inifinite values
 ```
@@ -136,6 +136,17 @@ You should find that all of the reported values are 0. So what makes more sense?
 Here, I think that if nobody is at risk, we shouldn't include those outbreaks in further analysis. Thus, we'll go with our computed outcome and remove all observations that have missing or infinite values for the outcome of interest, since those can't be used for model fitting. Thus, we go ahead and remove any observations that have un-useable values in the outcome.
 
 ```{r filter1}
+
+filter_Inf <- noro_add_new_var %>% dplyr::filter(!fracinf %in% c("Inf")) 
+
+filter_NA <- filter_Inf[!is.na(filter_Inf$fracinf), ]
+
+min(filter_NA$fracinf) #Check for zeros
+max(filter_NA$fracinf) #Check for NAs
+glimpse(filter_NA) #View total observations
+unique(filter_NA$fracinf) #Final check of all unique entries to look for weird data
+
+
 #Write code that removes all observations that have an outcome that is not very useful, i.e. either NA or infinity. Then look at the outcome variable again to make sure things are fixed. Also check the size of the new dataset to see by how much it shrunk.
 ```
 
@@ -152,6 +163,11 @@ For this analysis exercise, we just pick the following variables for further ana
 Note that - as often happens for real data - there are inconsistencies between the codebook and the actual datasheet. Here, names of variables and spelling in the codebook do not fully agree with the data. The above list of variables is based on codebook, and you need to make sure you get the right names from the data when selecting those variables.
 
 ```{r reducepredictors}
+
+noro_data_reduce_vars <- filter_NA[, c("Action1", "CasesAll", "Category", "Country", "Deaths", "gg2c4", "Hemisphere", "Hospitalizations", "MeanA1", "MeanD1", "MeanI1", "MedianA1", "MedianI1", "OBYear", "Path1", "RiskAll", "season", "Setting_1", "Setting_2", "Trans1", "Vomit", "fracinf")]
+
+glimpse(noro_data_reduce_vars)
+
 #write code to select the specified variables
 ```
 
@@ -162,14 +178,24 @@ We can start by looking at missing data. While the `summary` function gives that
 
 
 ```{r check-reduced-data}
+print(colSums(is.na(noro_data_reduce_vars)))
+
 # this code prints number of missing for each variable (assuming your dataframe is called d)
 # print(colSums(is.na(d))) 
+
+vis_dat(noro_data_reduce_vars) #All data-grey is missing. Shows spread of other classes in observations as well.
+vis_miss(noro_data_reduce_vars) #All data-seperates by present and absent, also gives percentages.
+
 # write code to use the visdat R package, add code that plots a heatmap of missing values  
 ```
 
 It looks like we have a lot of missing data for the `MeanA1` and `MedianA1` variables. If we wanted to keep those variables, we would be left with very few observations. So let's drop those two variables. After that, we will drop all observations that have missing data (seems to be `Hospitalization` and `Deaths`).
 
 ```{r further-reduce-data}
+
+drop_A1vars <- dplyr::select(noro_data_reduce_vars, -MeanA1, -MedianA1)
+
+
 # write code to remove the 2 "A1" variables, then drop all remaining observations with NA
 ```
 
@@ -177,6 +203,8 @@ It looks like we have a lot of missing data for the `MeanA1` and `MedianA1` vari
 Let's now check the format of each variable. Depending on how you loaded the data, some variables might not be in the right format. Make sure everything that should be numeric is numeric/integer, everything that should be a factor is a factor. There should be no variable coded as `character`. Once all variables have the right format, take a look at the data again.
 
 ```{r further-clean-data}
+glimpse(drop_A1vars) #Suspiciously it looks fine....
+
 # write code to format variables as needed
 ```
 
