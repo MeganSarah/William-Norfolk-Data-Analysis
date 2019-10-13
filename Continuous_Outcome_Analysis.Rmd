@@ -60,7 +60,7 @@ Let's assume that our main outcome of interest is the fraction of individuals th
 Important Variables:
 Cases1 = Total number of suspected primary cases
 Cases2 = Total number of suspected secondary 
-Total number of suspected cases, including both primary and secondary cases
+CasesAll Total number of suspected cases, including both primary and secondary cases
 RateAll = (secondary cases + primary cases/persons at risk)*100
 Rate1 = (primary cases/persons at risk)*100
 Rate2 = (secondary cases/persons at risk)*100
@@ -68,7 +68,7 @@ RiskAll = Total number of persons at risk of being a primary or secondary case
 
 ```{r createvar}
 
-noro_add_new_var <- raw_noro_data %>% dplyr::mutate(fracinf = CasesAll / RiskAll) * 100
+noro_add_new_var <- raw_noro_data %>% dplyr::mutate(fracinf = CasesAll/RiskAll)*100
 
 head(noro_add_new_var$RateAll)
 head(noro_add_new_var$fracinf)
@@ -89,8 +89,12 @@ As you see in the Rmd file, the previous text box is created by placing texts be
 Use both text summaries and plots to take a look at the new variable you created to see if everything looks ok or if we need further cleaning.
 
 ```{r checkdata}
+glimpse(noro_add_new_var$fracinf)
+summary(noro_add_new_var$fracinf)
+str(noro_add_new_var$fracinf)
+head(noro_add_new_var$fracinf)
 
-
+noro_add_new_var %>% ggplot(aes(x = fracinf)) + geom_density()
 #Write code that takes a look at the values of the `fracinf` variable you created. Look at both text summaries and a figure.
 ```
 
@@ -100,14 +104,28 @@ Let's take a look at the `RateAll` variable recorded in the dataset and compare 
 First, create a plot that lets you quickly see if/how the variables differ. 
 
 ```{r checkoutcome}
+
+#THIS IS NOT RIGHT? I THINK?-Try AGAIN LATER
+
+noro_add_new_var %>% ggplot(aes(x = RateAll)) + geom_density()
+noro_add_new_var %>% ggplot(aes(x = fracinf)) + geom_density()
+
+
+
+noro_add_new_var %>% ggplot(aes(x = fracinf, y = RateAll)) + geom_point()
+
+noro_add_new_var %>% ggplot(aes(x = RateAll - fracinf)) + geom_density()
+
 # Plot one variable on the x axis, the other on the y axis
 # also plot the difference of the 2 variables
-# make sure you adjust so both are in the same units
+# make sure you adjust so both are in the same units#######NOT SURE WHAT THIS MEANS, RECHECK#########
 ```
 
 Both ways of plotting the data show that for most outbreaks, the two ways of getting the outcome agree. So that's good. But we need to look closer and resolve the problem with infinite values above. Check to see what the `RateAll` variable has for those infinite values.
 
 ```{r infvalues}
+subset(noro_add_new_var$RateAll, noro_add_new_var$fracinf == "inf")
+
 #Write code that looks at the values of RateAll where we have inifinite values
 ```
 
