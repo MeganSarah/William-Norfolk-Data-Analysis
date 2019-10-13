@@ -1,6 +1,6 @@
 ---
-title: Continuous Outcome Analysis
-author: YOURNAME
+title: Continuous Outcome Analysis-William Norfolk
+author: William Norfolk
 date: "`r Sys.Date()`"
 #bibliography: ../media/references.bib
 output: 
@@ -38,6 +38,11 @@ library('earth')
 We will be exploring and fitting a dataset of norovirus outbreaks. You can look at the codebook, which briefly explains the meaning of each variable. If you are curious, you can check some previous papers that we published using (slighly different versions of) this dataset [here](http://handelgroup.uga.edu/publication/devasia15epiinf/) and [here](http://handelgroup.uga.edu/publication/desai2012cid/).
 
 ```{r loaddata}
+
+raw_noro_data <- read.csv("./norodata.csv")
+
+glimpse(raw_noro_data)
+
 #Write code that loads the dataset and does a quick check to make sure the data loaded ok (using e.g. `str` and `summary` or similar such functions).
 
 #data_raw <- (FILL HERE)
@@ -52,7 +57,22 @@ We will be exploring and fitting a dataset of norovirus outbreaks. You can look 
 
 Let's assume that our main outcome of interest is the fraction of individuals that become infected in a given outbreak. The data reports that outcome (called `RateAll`), but we'll also compute it ourselves so that we can practice creating new variables. To do so, take a look at the data (maybe peek at the Codebook) and decide which of the existing variables you should use to compute the new one. This new outcome variable will be added to the data frame.
 
+Important Variables:
+Cases1 = Total number of suspected primary cases
+Cases2 = Total number of suspected secondary 
+Total number of suspected cases, including both primary and secondary cases
+RateAll = (secondary cases + primary cases/persons at risk)*100
+Rate1 = (primary cases/persons at risk)*100
+Rate2 = (secondary cases/persons at risk)*100
+RiskAll = Total number of persons at risk of being a primary or secondary case
+
 ```{r createvar}
+
+noro_add_new_var <- raw_noro_data %>% dplyr::mutate(fracinf = CasesAll / RiskAll) * 100
+
+head(noro_add_new_var$RateAll)
+head(noro_add_new_var$fracinf)
+
 # Use the `mutate()` function from the `dplyr` package to create a new column with this value. Call the new variable `fracinf`.
 #d <- data_raw %>% dplyr::mutate(FILL HERE)
 ```
@@ -69,6 +89,8 @@ As you see in the Rmd file, the previous text box is created by placing texts be
 Use both text summaries and plots to take a look at the new variable you created to see if everything looks ok or if we need further cleaning.
 
 ```{r checkdata}
+
+
 #Write code that takes a look at the values of the `fracinf` variable you created. Look at both text summaries and a figure.
 ```
 
