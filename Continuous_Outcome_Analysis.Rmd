@@ -203,7 +203,7 @@ drop_A1vars <- dplyr::select(noro_data_reduce_vars, -MeanA1, -MedianA1)
 Let's now check the format of each variable. Depending on how you loaded the data, some variables might not be in the right format. Make sure everything that should be numeric is numeric/integer, everything that should be a factor is a factor. There should be no variable coded as `character`. Once all variables have the right format, take a look at the data again.
 
 ```{r further-clean-data}
-glimpse(drop_A1vars) #Suspiciously it looks fine....
+glimpse(drop_A1vars) #Suspiciously it looks fine to me....
 
 # write code to format variables as needed
 ```
@@ -211,6 +211,35 @@ glimpse(drop_A1vars) #Suspiciously it looks fine....
 Take another look at the data. You should find that for the dataset, most things look reasonable, but the variable `Setting_1` has a lot of different levels/values. That many categories, most with only a single entry, will likely not be meaningful for modeling. One option is to drop the variable. But assume we think it's an important variable to include and we are especially interested in the difference between restaurant settings and other settings. We could then create a new variable that has only two levels, `Restaurant` and `Other`.
 
 ```{r recode-setting}
+
+unique(drop_A1vars$Setting_1)
+
+modify_Restaurant <- drop_A1vars %>% mutate(Setting_1 = recode(Setting_1,
+                                 "restaurant" = "Restaurant",
+                                 "take-out restaurant" = "Restaurant",
+                                 "Luncheon and Restaruant" = "Restaurant",
+                                 "Catering service in Restaurant" = "Restaurant",
+                                 "restaurant in Northern Territory" = "Restaurant",
+                                 "Shared meal at a restaurant" = "Restaurant",
+                                 "Resaurant" = "Restaurant",
+                                 "restaurant; catered party" = "Restaurant"))
+
+find_Restaurant <- modify_Restaurant[grep("Restaurant", modify_Restaurant$Setting_1), ]
+
+add_new_Setting_Rest <- find_Restaurant %>% dplyr::mutate(Setting = "Restaurant")
+
+
+find_not_Restaurant <- dplyr::filter(modify_Restaurant, !grepl("Restaurant", Setting_1))
+
+add_new_Setting_not_Rest <- find_not_Restaurant %>% dplyr::mutate(Setting = "Other")
+
+
+combined_data <- merge(add_new_Setting_not_Rest, add_new_Setting_Rest, all = TRUE)
+
+combined_data$Setting_1 <- NULL
+
+complete_combined_data <- combined_data
+
 #write code that creates a new variable called `Setting` based on `Setting_1` buth with only 2 levels, `Restaurant` and `Other`. Then remove the `Setting_1` variable. Note that restaurant is sometimes capitalized and sometimes not. You need to fix that first. For these lines of code, the 'Factor' chapter in R4DS might be helpful here.
 ```
 
