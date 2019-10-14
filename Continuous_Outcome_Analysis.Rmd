@@ -195,7 +195,7 @@ It looks like we have a lot of missing data for the `MeanA1` and `MedianA1` vari
 
 drop_A1vars <- dplyr::select(noro_data_reduce_vars, -MeanA1, -MedianA1)
 
-
+drop_A1vars <- na.omit(drop_A1vars)
 # write code to remove the 2 "A1" variables, then drop all remaining observations with NA
 ```
 
@@ -288,7 +288,11 @@ Another useful check is to see if there are strong correlations between some of 
 
 ```{r corrplot}
 
-corr_subset <- 
+corr_subset <- minus_zero_year[c(2, 5, 8, 9 , 10, 11, 14, 18)]
+
+corr_matrix <- cor(corr_subset)
+
+corrplot(corr_matrix, method = "square")
 
 # using e.g. the corrplot package (or any other you like), create a correlation plot of the numeric variables
 ```
@@ -300,6 +304,33 @@ It doesn't look like there are any very strong correlations between continuous v
 Next, let's create plots for the categorical variables, again our main outcome of interest on the y-axis.
 
 ```{r plots-2}
+
+Action1_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = Action1, y = fracinf), stat = "identity")
+
+Cat_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = Category, y = fracinf), stat = "identity")
+
+Coun_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = Country, y = fracinf), stat = "identity")
+
+gg2c4_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = gg2c4, y = fracinf), stat = "identity")
+
+Hemi_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = Hemisphere, y = fracinf), stat = "identity")
+
+OBY_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = OBYear, y = fracinf), stat = "identity")
+
+Path1_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = Path1, y = fracinf), stat = "identity")
+
+Season_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = season, y = fracinf), stat = "identity")
+
+Setting2_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = Setting_2, y = fracinf), stat = "identity")
+
+Trans1_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = Trans1, y = fracinf), stat = "identity")
+
+Setting_frac <- minus_zero_year %>% ggplot() + geom_bar(aes(x = Setting, y = fracinf), stat = "identity")
+
+
+
+grid.arrange(Action1_frac, Cat_frac, Coun_frac, gg2c4_frac, Hemi_frac, OBY_frac, Path1_frac, Season_frac, Setting2_frac, Trans1_frac, Setting_frac, nrow = 3)
+
 #write code that produces plots showing our outcome of interest on the y-axis and each categorical predictor on the x-axis.
 #you can use the facet_wrap functionality in ggplot for it, or do it some other way.
 ```
