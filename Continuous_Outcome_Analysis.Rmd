@@ -240,6 +240,7 @@ combined_data$Setting_1 <- NULL
 
 complete_combined_data <- combined_data
 
+
 #write code that creates a new variable called `Setting` based on `Setting_1` buth with only 2 levels, `Restaurant` and `Other`. Then remove the `Setting_1` variable. Note that restaurant is sometimes capitalized and sometimes not. You need to fix that first. For these lines of code, the 'Factor' chapter in R4DS might be helpful here.
 ```
 
@@ -251,6 +252,20 @@ Next, let's create a few plots showing the outcome and the predictors.
 
 
 ```{r plots-1}
+
+library(gridExtra)
+
+cases_frac <- complete_combined_data %>% ggplot() + geom_point(aes(x = CasesAll, y = fracinf))
+deaths_frac <- complete_combined_data %>% ggplot() + geom_point(aes(x = Deaths, y = fracinf))
+hos_frac <- complete_combined_data %>% ggplot() + geom_point(aes(x = Hospitalizations, y = fracinf))
+md1_frac <- complete_combined_data %>% ggplot() + geom_point(aes(x = MeanD1, y = fracinf))
+mi1_frac <- complete_combined_data %>% ggplot() + geom_point(aes(x = MeanI1, y = fracinf))
+medi1_frac <- complete_combined_data %>% ggplot() + geom_point(aes(x = MedianI1, y = fracinf)) 
+risk_frac <- complete_combined_data %>% ggplot() + geom_point(aes(x = RiskAll, y = fracinf)) 
+vomit_frac <- complete_combined_data %>% ggplot() + geom_point(aes(x = Vomit, y = fracinf))
+
+grid.arrange(cases_frac, deaths_frac, hos_frac, md1_frac, mi1_frac, medi1_frac, risk_frac, vomit_frac, nrow = 3)
+
 #write code that produces plots showing our outcome of interest on the y-axis and each numeric predictor on the x-axis.
 #you can use the facet_wrap functionality in ggplot for it, or do it some other way.
 ```
@@ -258,6 +273,13 @@ Next, let's create a few plots showing the outcome and the predictors.
 One thing I notice in the plots is that there are lots of zeros for many predictors and things look skewed. That's ok, but means we should probably standardize these predictors. One strange finding (that I could have caught further up when printing the numeric summaries, but didn't) is that there is (at least) one outbreak that has outbreak year reported as 0. That is, of course, wrong and needs to be fixed. There are different ways of fixing it, the best, of course, would be to trace it back and try to fix it with the right value. We won't do that here. Instead, we'll remove that observation.
 
 ```{r remove-wrong-year}
+
+complete_combined_data$OBYear == 0
+
+minus_zero_year <- complete_combined_data[-c(457), ]
+
+minus_zero_year$OBYear == 0
+
 # write code that figures out which observation(s) have 0 years and remove those from the dataset.
 # do some quick check to make sure OByear values are all reasonable now
 ```
@@ -265,6 +287,9 @@ One thing I notice in the plots is that there are lots of zeros for many predict
 Another useful check is to see if there are strong correlations between some of the numeric predictors. That might indicate collinearity, and some models can't handle that very well. In such cases, one might want to remove a predictor. We'll create a correlation plot of the numeric variables to inspect this.
 
 ```{r corrplot}
+
+corr_subset <- 
+
 # using e.g. the corrplot package (or any other you like), create a correlation plot of the numeric variables
 ```
 
