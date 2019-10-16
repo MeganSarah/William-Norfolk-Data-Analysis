@@ -471,16 +471,18 @@ set.seed(1111) #makes each code block reproducible-lm
 
 fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
 
-Npred <- ncol(data_train)-1 # number of predictors
 
-resultmat_lm <- data.frame(Variable = names(data_train)[-1], RMSE = rep(0,Npred)) #store values for RMSE for each variable
 
-for (n in 2:ncol(data_train)) #loop over each predictor. For this to work, outcome must be in 1st column
-{
-  fit1 <- train( as.formula(paste("fracinf ~",names(data_train)[n])) , data = data_train, method = "lm", trControl = fitControl) 
- resultmat_lm[n-1,2]= fit1$results$RMSE  
-}
-print(resultmat_lm)
+fit1 <- train(fracinf~ ., data = data_train, method = "lm", trControl = fitControl) 
+
+fit2 <- train(fracinf~ ., data = data_train, method = "earth", trControl = fitControl) 
+
+fit3 <- train(fracinf~ ., data = data_train, method = "knn", trControl = fitControl) 
+
+
+print(fit1)
+print(fit2)
+print(fit3)
 
 
 
@@ -490,46 +492,42 @@ print(resultmat_lm)
 
 
 ```{r}
-
-set.seed(1111) #makes each code block reproducible-earth
+set.seed(1111) #makes each code block reproducible-lm
 
 #write code that uses the train function in caret to fit the outcome to all predictors using the 3 methods specified.
 
 
 fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
 
-Npred_earth <- ncol(data_train)-1 # number of predictors
 
-resultmat_earth <- data.frame(Variable = names(data_train)[-1], RMSE = rep(0,Npred_earth)) #store values for RMSE for each variable
 
-for (n in 2:ncol(data_train)) #loop over each predictor. For this to work, outcome must be in 1st column
-{
-  fit2 <- train( as.formula(paste("fracinf ~",names(data_train)[n])), data = data_train, method = "earth", trControl = fitControl) 
- resultmat_earth[n-1,2]= fit2$results$RMSE  
-}
-print(resultmat_earth)
+fit2 <- train(fracinf~ ., data = data_train, method = "earth", trControl = fitControl) 
+
+
+
+print(fit2)
+
 
 
 ```
 
+
 ```{r}
-set.seed(1111) #makes each code block reproducible-knn
+set.seed(1111) #makes each code block reproducible-lm
 
 #write code that uses the train function in caret to fit the outcome to all predictors using the 3 methods specified.
 
 
-fitControl_knn <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
+fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
 
-Npred <- ncol(data_train)-1 # number of predictors
 
-resultmat_knn <- data.frame(Variable = names(data_train)[-1], RMSE = rep(0,Npred)) #store values for RMSE for each variable
 
-for (n in 2:ncol(data_train)) #loop over each predictor. For this to work, outcome must be in 1st column
-{
-  fit3 <- train( as.formula(paste("fracinf ~",names(data_train)[n])) , data = data_train, method = "knn", trControl = fitControl_knn) 
- resultmat_knn[n-1,2]= fit3$results$RMSE  
-}
-print(resultmat_knn)
+fit2 <- train(fracinf~ ., data = data_train, method = "knn", trControl = fitControl) 
+
+
+
+print(fit2)
+
 ```
 
 
