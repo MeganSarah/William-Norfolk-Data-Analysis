@@ -429,19 +429,29 @@ mean(data_train$fracinf) #Seems a bit too easy, I think I might have misundersto
 Now we'll fit the outcome to each predictor one at a time. To evaluate our model performance, we will use cross-validation and the caret package. Note that we just fit a linear model. `caret` itself is not a model. Instead, it provides an interface that allows easy access to many different models and has functions to do a lot of steps quickly - as you will see below. Most of the time, you can do all our work through the `caret` (or `mlr`) workflow. The problem is that because `caret` calls another package/function, sometimes things are not as clear, especially when you get an error message. So occasionally, if you know you want to use a specific model and want more control over things, you might want to not use `caret` and instead go straight to the model function (e.g. `lm` or `glm` or...). We've done a bit of that before, for the remainder of the class we'll mostly access underlying functions through `caret`.
 
 ```{r}
+data_train <- data_train[, c(18,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19)] #Reorder cols bring fracinf to front. Give it a seperate chunk or else every rerun of the code will continue to change the order of variables.
+
+```
+
+
+```{r}
 #There is probably a nicer tidyverse way of doing this. I just couldn't think of it, so did it this way.
 
 
 set.seed(1111) #makes each code block reproducible
 fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
 Npred <- ncol(data_train)-1 # number of predictors
-resultmat <- data.frame(Variable = names(data_train)[-1], RMSE = rep(0,Npred)) #store values for RMSE for each variable
+
+resultmat_single <- data.frame(Variable = names(data_train)[-1], RMSE = rep(0,Npred)) #store values for RMSE for each variable
+
+
+
 for (n in 2:ncol(data_train)) #loop over each predictor. For this to work, outcome must be in 1st column
 {
-  fit1 <- train( as.formula(paste("fracinf ~",names(data_train)[n])) , data = data_train, method = "lm", trControl = fitControl) 
- resultmat[n-1,2]= fit1$results$RMSE  
+  fit0 <- train( as.formula(paste("fracinf ~",names(data_train)[n])) , data = data_train, method = "lm", trControl = fitControl) 
+ resultmat_single[n-1,2]= fit0$results$RMSE  
 }
-print(resultmat)
+print(resultmat_single)
 
 ```
 
@@ -452,14 +462,78 @@ This analysis shows 2 things that might need closer inspections. We get some err
 
 Now let's perform fitting with multiple predictors. Use the same setup as the code above to fit the outcome to all predictors at the same time. Do that for 3 different models: linear (`lm`), regression splines (`earth`), K nearest neighbor (`knn`). You might have to install/load some extra R packages for that. If that's the case, `caret` will tell you.
 
+
 ```{r}
-set.seed(1111) #makes each code block reproducible
+set.seed(1111) #makes each code block reproducible-lm
 
 #write code that uses the train function in caret to fit the outcome to all predictors using the 3 methods specified.
 
 
+fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
+
+Npred <- ncol(data_train)-1 # number of predictors
+
+resultmat_lm <- data.frame(Variable = names(data_train)[-1], RMSE = rep(0,Npred)) #store values for RMSE for each variable
+
+for (n in 2:ncol(data_train)) #loop over each predictor. For this to work, outcome must be in 1st column
+{
+  fit1 <- train( as.formula(paste("fracinf ~",names(data_train)[n])) , data = data_train, method = "lm", trControl = fitControl) 
+ resultmat_lm[n-1,2]= fit1$results$RMSE  
+}
+print(resultmat_lm)
+
+
+
 #report the RMSE for each method. Note that knn and earth perform some model tuning (we'll discuss this soon) and report multiple RMSE. Use the lowest value.
 ```
+
+
+
+```{r}
+
+set.seed(1111) #makes each code block reproducible-earth
+
+#write code that uses the train function in caret to fit the outcome to all predictors using the 3 methods specified.
+
+
+fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
+
+Npred_earth <- ncol(data_train)-1 # number of predictors
+
+resultmat_earth <- data.frame(Variable = names(data_train)[-1], RMSE = rep(0,Npred_earth)) #store values for RMSE for each variable
+
+for (n in 2:ncol(data_train)) #loop over each predictor. For this to work, outcome must be in 1st column
+{
+  fit2 <- train( as.formula(paste("fracinf ~",names(data_train)[n])), data = data_train, method = "earth", trControl = fitControl) 
+ resultmat_earth[n-1,2]= fit2$results$RMSE  
+}
+print(resultmat_earth)
+
+
+```
+
+```{r}
+set.seed(1111) #makes each code block reproducible-knn
+
+#write code that uses the train function in caret to fit the outcome to all predictors using the 3 methods specified.
+
+
+fitControl_knn <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
+
+Npred <- ncol(data_train)-1 # number of predictors
+
+resultmat_knn <- data.frame(Variable = names(data_train)[-1], RMSE = rep(0,Npred)) #store values for RMSE for each variable
+
+for (n in 2:ncol(data_train)) #loop over each predictor. For this to work, outcome must be in 1st column
+{
+  fit3 <- train( as.formula(paste("fracinf ~",names(data_train)[n])) , data = data_train, method = "knn", trControl = fitControl_knn) 
+ resultmat_knn[n-1,2]= fit3$results$RMSE  
+}
+print(resultmat_knn)
+```
+
+
+
 
 So we find that some of these models do better than the null model and the single-predictor ones. KNN seems the best of those 3. Next, we want to see if pre-processing our data a bit more might lead to even better results.
 
@@ -473,6 +547,9 @@ First, we look at near-zero variance predictors. Those are predictors that have 
 Note that in general, one should apply all these processing steps to the training data only. Otherwise, you would use information from the test set to decide on data manipulations for all data (called data leakage). It is a bit hard to say when to make the train/test split. Above, we did a good bit of cleaning on the full dataset before we split. One could argue that one should split right at the start, then do the cleaning. However, this doesn't work for certain procedures (e.g., removing observations with NA). 
 
 ```{r}
+
+nearZeroVar(data_train, saveMetrics = TRUE)
+
 #write code using the caret function `nearZeroVar` to look at potential uninformative predictors. Set saveMetrics to TRUE. Look at the results 
 ```
 
@@ -480,6 +557,9 @@ You'll see that several variables are flagged as having near-zero variance. Look
 
 
 ```{r}
+
+train_drop_near_zero <- dplyr::select(data_train, -Deaths, -Hemisphere, -Hospitalizations, -MeanD1, -MeanI1, -MedianI1)
+
 #write code that removes all variables with near zero variance from the data 
 ```
 
@@ -490,6 +570,8 @@ Next, we noticed during our exploratory analysis that it might be useful to cent
 
 
 ```{r processed-fit}
+
+
 #write code that repeats the multi-predictor fits from above, but this time applies centering and scaling of variables.
 #look at the RMSE for the new fits
 ```
@@ -501,6 +583,9 @@ So it looks like the linear mode got a bit better, KNN actually got worse, and M
 We can look at the uncertainty in model performance, e.g., the RMSE. Let's look at it for the models fit to the un-processed data.
 
 ```{r uncertainty}
+
+resamples(fit1, fit2, fit3)
+
 #Use the `resamples` function in caret to extract uncertainty from the 3 models fit to the data  that doesn't have predictor pre-processing, then plot it
 ```
 
