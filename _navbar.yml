@@ -9,11 +9,11 @@ left:
   - text: "Completed Projects"
     menu:
       - text: "Coding Exercise"
-      - href: ./WilliamNorfolk_Coding.html
+        href: ./WilliamNorfolk_Coding.html
       - text: "TidyTuesday1 Exercise"
-      - href: ./TidyTuesday1index.html
+        href: ./TidyTuesday1index.html
       - text: "Visualization Exercise"
-      - href: ./Visualization_index.html
+        href: ./Visualization_index.html
   - text: "About the Author"
     href: ./Author.html
 right:
