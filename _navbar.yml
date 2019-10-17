@@ -6,6 +6,14 @@ left:
       - text: "Continuous Outcome Analysis"
         href: ./Continuous_Outcome_Analysis.html
       - text: "Future Analysis"
+  - text: "Completed Projects"
+    menu:
+      - text: "Coding Exercise"
+      - href: ./WilliamNorfolk_Coding.html
+      - text: "TidyTuesday1 Exercise"
+      - href: ./TidyTuesday1index.html
+      - text: "Visualization Exercise"
+      - href: ./Visualization_index.html
   - text: "About the Author"
     href: ./Author.html
 right:

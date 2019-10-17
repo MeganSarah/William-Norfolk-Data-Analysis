@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="William Norfolk" />
+
+
+<title>Tidy Tuesday 1 Exercise-WilliamNorfolk</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  { color: #cccccc; background-color: #303030; }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffcfaf; } /* Alert */
+code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #dca3a3; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #f0dfaf; } /* ControlFlow */
+code span.ch { color: #dca3a3; } /* Char */
+code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+code span.co { color: #7f9f7f; } /* Comment */
+code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+code span.do { color: #7f9f7f; } /* Documentation */
+code span.dt { color: #dfdfbf; } /* DataType */
+code span.dv { color: #dcdccc; } /* DecVal */
+code span.er { color: #c3bf9f; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #c0bed1; } /* Float */
+code span.fu { color: #efef8f; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+code span.kw { color: #f0dfaf; } /* Keyword */
+code span.op { color: #f0efd0; } /* Operator */
+code span.ot { color: #efef8f; } /* Other */
+code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+code span.sc { color: #dca3a3; } /* SpecialChar */
+code span.ss { color: #cc9393; } /* SpecialString */
+code span.st { color: #cc9393; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #cc9393; } /* VerbatimString */
+code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="customstyles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Data Analysis Exercise Website-William Norfolk</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Analyses
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="./Continuous_Outcome_Analysis.html">Continuous Outcome Analysis</a>
+    </li>
+    <li class="dropdown-header">Future Analysis</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Completed Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Coding Exercise</li>
+    <li>
+      <a href="./WilliamNorfolk_Coding.html"></a>
+    </li>
+    <li class="dropdown-header">TidyTuesday1 Exercise</li>
+    <li>
+      <a href="./TidyTuesday1index.html"></a>
+    </li>
+    <li class="dropdown-header">Visualization Exercise</li>
+    <li>
+      <a href="./Visualization_index.html"></a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="./Author.html">About the Author</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/epid8060fall2019/William-Norfolk-Data-Analysis">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Tidy Tuesday 1 Exercise-WilliamNorfolk</h1>
+<h4 class="author">William Norfolk</h4>
+<h4 class="date">10/1/2019</h4>
+
+</div>
+
+
+<p>For this exercise we will be cleaning and wrangling the TidyTuesday data titled “Pizza Party.” These data contain three distinct data sets: pizza_barstool, pizza_jared and pizza_datafiniti. Pizza_jared and barstol contain demographic and rating data on the resturants within the study whereas, pizza_datafiniti is a larger data set of purely demographic/location data.</p>
+<p>The data and TidyTuesday information can be found <a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-10-01">here</a>. Information about the TidyTuesday program can be found <a href="https://github.com/rfordatascience/tidytuesday">here</a>.</p>
+<p>For our exercise we will focus on the barstool and jared data sets since they contain rating data which seems to be some of the more interesting data in the sets. Addtiionally, we will focus largely on the city = Manhatan subgroup of the data set to investigate the pizza resturant deomgraphics and ratings of this division of New York City.</p>
+<p>Load all required packages.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## -- Attaching packages ------------------------ tidyverse 1.2.1 --</code></pre>
+<pre><code>## v tibble  2.1.3     v purrr   0.3.2
+## v readr   1.3.1     v stringr 1.4.0</code></pre>
+<pre><code>## -- Conflicts --------------------------- tidyverse_conflicts() --
+## x gridExtra::combine() masks dplyr::combine()
+## x dplyr::filter()      masks stats::filter()
+## x dplyr::lag()         masks stats::lag()
+## x purrr::lift()        masks caret::lift()</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">library</span>(readr)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">library</span>(knitr)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="kw">library</span>(ggthemes)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">library</span>(forcats)</span></code></pre></div>
+<p>Looking at the data, the pizza_jared and pizza_barstool looks interesting by the demographics and the fact that some resturants overlap in the set. We will focus on these two data sets for our wrangling.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>pizza_jared &lt;-<span class="st"> </span>readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_jared.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   polla_qid = col_double(),
+##   answer = col_character(),
+##   votes = col_double(),
+##   pollq_id = col_double(),
+##   question = col_character(),
+##   place = col_character(),
+##   time = col_double(),
+##   total_votes = col_double(),
+##   percent = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>pizza_barstool &lt;-<span class="st"> </span>readr<span class="op">::</span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_barstool.csv&quot;</span>)</span></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   name = col_character(),
+##   address1 = col_character(),
+##   city = col_character(),
+##   country = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<p>Lets start with the barstool data set.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">glimpse</span>(pizza_barstool)</span></code></pre></div>
+<pre><code>## Observations: 463
+## Variables: 22
+## $ name                                 &lt;chr&gt; &quot;Pugsley&#39;s Pizza&quot;, &quot;Willi...
+## $ address1                             &lt;chr&gt; &quot;590 E 191st St&quot;, &quot;265 Un...
+## $ city                                 &lt;chr&gt; &quot;Bronx&quot;, &quot;Brooklyn&quot;, &quot;New...
+## $ zip                                  &lt;dbl&gt; 10458, 11211, 10017, 1003...
+## $ country                              &lt;chr&gt; &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;...
+## $ latitude                             &lt;dbl&gt; 40.85877, 40.70808, 40.75...
+## $ longitude                            &lt;dbl&gt; -73.88484, -73.95090, -73...
+## $ price_level                          &lt;dbl&gt; 1, 1, 1, 2, 2, 1, 1, 1, 2...
+## $ provider_rating                      &lt;dbl&gt; 4.5, 3.0, 4.0, 4.0, 3.0, ...
+## $ provider_review_count                &lt;dbl&gt; 121, 281, 118, 1055, 143,...
+## $ review_stats_all_average_score       &lt;dbl&gt; 8.011111, 7.774074, 5.666...
+## $ review_stats_all_count               &lt;dbl&gt; 27, 27, 9, 2, 1, 4, 5, 17...
+## $ review_stats_all_total_score         &lt;dbl&gt; 216.3, 209.9, 51.0, 11.2,...
+## $ review_stats_community_average_score &lt;dbl&gt; 7.992000, 7.742308, 5.762...
+## $ review_stats_community_count         &lt;dbl&gt; 25, 26, 8, 0, 0, 3, 4, 16...
+## $ review_stats_community_total_score   &lt;dbl&gt; 199.8, 201.3, 46.1, 0.0, ...
+## $ review_stats_critic_average_score    &lt;dbl&gt; 8.8, 0.0, 0.0, 4.3, 0.0, ...
+## $ review_stats_critic_count            &lt;dbl&gt; 1, 0, 0, 1, 0, 0, 0, 0, 0...
+## $ review_stats_critic_total_score      &lt;dbl&gt; 8.8, 0.0, 0.0, 4.3, 0.0, ...
+## $ review_stats_dave_average_score      &lt;dbl&gt; 7.7, 8.6, 4.9, 6.9, 7.1, ...
+## $ review_stats_dave_count              &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1...
+## $ review_stats_dave_total_score        &lt;dbl&gt; 7.7, 8.6, 4.9, 6.9, 7.1, ...</code></pre>
+<p>The zip code information looks interesting so lets dig into that variable first.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">unique</span>(pizza_barstool<span class="op">$</span>zip)</span></code></pre></div>
+<pre><code>##   [1] 10458 11211 10017 10036 10003 10001 10025 26505 26501 11201 10035
+##  [12] 10461 10705 55117 55401 55439 55417 55413 55414 55102  7050 10023
+##  [23] 10012  7031 10065 10007 10019 10016 10021 24740 10002 46406 60453
+##  [34] 60611 60610 60707 60614 46204 52246 52241 40202 40217 40208 48104
+##  [45] 48124 43229 43201 40507 40508 40503 44515 44503 44471 25311 38305
+##  [56] 55404 24060 14220 30009 30342 30305 30326 30045 30318 30303 28204
+##  [67] 30901 73106 19147  7202  7446  7110  7014  7407 10302  7070  7073
+##  [78] 10305  7030  7302 10280 10006 10014 10004 10005 10041 10038 10013
+##  [89] 11231 10011 33767 33602 78751 78222 78205 78209 32904 32118 32250
+## [100] 33181 33139 33401 33480 11224 11223 11230 11215 92101 92103 92109
+## [111] 90266 90401 90404 89109 89102 89101 94133 12866 12831 11946 11968
+## [122] 11554 11003 11414 11040 11415 11379 11238 11217 11206 11743 11222
+## [133] 10009  2639  2601  2554  2564  2563  2359  1902  2151  2557  2539
+## [144]  2128  2568  2113  2114  2108  2184  2116  2199  2368  2115  2347
+## [155]  2301  1801  2072  2467  2132  2535  1748  6338  6511  6907  6902
+## [166] 10550 10128 10028 10075 10024 10022 10018 10010 10112 10166 10168</code></pre>
+<p>Way too many zips to deal with alone, lets simplify the dataset.</p>
+<p>New York is known for its pizza, so we will focus on all the zip codes with a city observation of New York. It looks like all of the city = Ney York observations represent lacations in Manhattan. We will focus on Manhattan for our exercise. Then we take a look at all of the unique zip codes in the subset.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>nypizzaplaces_barstool &lt;-<span class="st"> </span><span class="kw">filter</span>(pizza_barstool, city <span class="op">==</span><span class="st"> &quot;New York&quot;</span>)</span>
+<span id="cb15-2"><a href="#cb15-2"></a></span>
+<span id="cb15-3"><a href="#cb15-3"></a>nypizzaplaces_barstool</span></code></pre></div>
+<pre><code>## # A tibble: 251 x 22
+##    name  address1 city    zip country latitude longitude price_level
+##    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+##  1 99 C~ 473 Lex~ New ~ 10017 US          40.8     -74.0           1
+##  2 Nino~ 39 W 46~ New ~ 10036 US          40.8     -74.0           2
+##  3 La P~ 31 E 20~ New ~ 10003 US          40.7     -74.0           2
+##  4 La G~ 382 8th~ New ~ 10001 US          NA        NA             1
+##  5 Chee~ 2640 Br~ New ~ 10025 US          40.8     -74.0           1
+##  6 Sal ~ 2671 Br~ New ~ 10025 US          40.8     -74.0           1
+##  7 MAMA~ 2750 Br~ New ~ 10025 US          40.8     -74.0           2
+##  8 Bond~ 221 W 4~ New ~ 10036 US          40.8     -74.0           2
+##  9 Pats~ 2287 1s~ New ~ 10035 US          40.8     -73.9           2
+## 10 LA T~ 101 W 6~ New ~ 10023 US          40.8     -74.0           1
+## # ... with 241 more rows, and 14 more variables: provider_rating &lt;dbl&gt;,
+## #   provider_review_count &lt;dbl&gt;, review_stats_all_average_score &lt;dbl&gt;,
+## #   review_stats_all_count &lt;dbl&gt;, review_stats_all_total_score &lt;dbl&gt;,
+## #   review_stats_community_average_score &lt;dbl&gt;,
+## #   review_stats_community_count &lt;dbl&gt;,
+## #   review_stats_community_total_score &lt;dbl&gt;,
+## #   review_stats_critic_average_score &lt;dbl&gt;,
+## #   review_stats_critic_count &lt;dbl&gt;,
+## #   review_stats_critic_total_score &lt;dbl&gt;,
+## #   review_stats_dave_average_score &lt;dbl&gt;, review_stats_dave_count &lt;dbl&gt;,
+## #   review_stats_dave_total_score &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">unique</span>(nypizzaplaces_barstool<span class="op">$</span>zip)</span></code></pre></div>
+<pre><code>##  [1] 10017 10036 10003 10001 10025 10035 10023 10012 10065 10007 10019
+## [12] 10016 10021 10002 10280 10006 10014 10004 10005 10041 10038 10013
+## [23] 10011 10009 10128 10028 10075 10024 10022 10018 10010 10112 10166
+## [34] 10168</code></pre>
+<p>That is more like it now we can probably visualize this group a little better.</p>
+<p>We are going to need to use our zip codes as bar graph bins so convert them to a character vector in case numeric causes issues down the line.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>nypizzaplaces_barstool<span class="op">$</span>zip &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">as.numeric</span>(nypizzaplaces_barstool<span class="op">$</span>zip))</span></code></pre></div>
+<p>Now make a preliminary plot. We need to add some asthetics to ensure we can read the zip code labels.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>nybarstooltest &lt;-<span class="st"> </span>nypizzaplaces_barstool <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="st">     </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> zip, <span class="dt">fill =</span> zip), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a>nypizzabyzip &lt;-<span class="st"> </span>nybarstooltest <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>), <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="st">&quot;#CCCCCC&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;NY Pizza Places by Zip Code&quot;</span>, <span class="dt">subtitle =</span> <span class="st">&quot;as evaluated by barstool sports&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;Zip Code&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Total Pizza Resturants&quot;</span>)</span>
+<span id="cb20-5"><a href="#cb20-5"></a></span>
+<span id="cb20-6"><a href="#cb20-6"></a>nypizzabyzip</span></code></pre></div>
+<p><img src="TidyTuesday1index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>This is pretty interesting, but Zip Codes do not tell much outright to people who are not from NYC so lets try to reassign some codes to different area groups. Lets also try to condense the data even further there are still a bit too many bars here.</p>
+<p>There is a handy list of Manhattan borough names by zip code found on the NY department of health <a href="https://www.health.ny.gov/statistics/cancer/registry/appendix/neighborhoods.htm">website</a>.</p>
+<p>We can apply these names to form smaller subgroups of our data by zip code distrubution.</p>
+<p>To start, mutate a new variable by recoding the existing zip variable. I think there is probably a more efficent way to do this, but this method worked for this scenario. Since zip has to be character class and non-continious this makes this task difficult but this option works.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>nypizzabyborough &lt;-<span class="st"> </span>nypizzaplaces_barstool <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="dt">borough_name =</span> <span class="kw">recode</span>(zip, </span>
+<span id="cb21-3"><a href="#cb21-3"></a>                      <span class="st">&quot;10001&quot;</span> =<span class="st"> &quot;Chelsea and Clinton&quot;</span>,</span>
+<span id="cb21-4"><a href="#cb21-4"></a>                      <span class="st">&quot;10011&quot;</span> =<span class="st"> &quot;Chelsea and Clinton&quot;</span>,</span>
+<span id="cb21-5"><a href="#cb21-5"></a>                      <span class="st">&quot;10018&quot;</span> =<span class="st"> &quot;Chelsea and Clinton&quot;</span>,</span>
+<span id="cb21-6"><a href="#cb21-6"></a>                      <span class="st">&quot;10019&quot;</span> =<span class="st"> &quot;Chelsea and Clinton&quot;</span>,</span>
+<span id="cb21-7"><a href="#cb21-7"></a>                      <span class="st">&quot;10036&quot;</span> =<span class="st"> &quot;Chelsea and Clinton&quot;</span>,</span>
+<span id="cb21-8"><a href="#cb21-8"></a>                      <span class="st">&quot;10002&quot;</span> =<span class="st"> &quot;Lower East Side&quot;</span>,</span>
+<span id="cb21-9"><a href="#cb21-9"></a>                      <span class="st">&quot;10003&quot;</span> =<span class="st"> &quot;Lower East Side&quot;</span>,</span>
+<span id="cb21-10"><a href="#cb21-10"></a>                      <span class="st">&quot;10009&quot;</span> =<span class="st"> &quot;Lower East Side&quot;</span>,</span>
+<span id="cb21-11"><a href="#cb21-11"></a>                      <span class="st">&quot;10004&quot;</span> =<span class="st"> &quot;Lower Manhattan&quot;</span>,</span>
+<span id="cb21-12"><a href="#cb21-12"></a>                      <span class="st">&quot;10005&quot;</span> =<span class="st"> &quot;Lower Manhattan&quot;</span>,</span>
+<span id="cb21-13"><a href="#cb21-13"></a>                      <span class="st">&quot;10006&quot;</span> =<span class="st"> &quot;Lower Manhattan&quot;</span>,</span>
+<span id="cb21-14"><a href="#cb21-14"></a>                      <span class="st">&quot;10007&quot;</span> =<span class="st"> &quot;Lower Manhattan&quot;</span>,</span>
+<span id="cb21-15"><a href="#cb21-15"></a>                      <span class="st">&quot;10038&quot;</span> =<span class="st"> &quot;Lower Manhattan&quot;</span>,</span>
+<span id="cb21-16"><a href="#cb21-16"></a>                      <span class="st">&quot;10280&quot;</span> =<span class="st"> &quot;Lower Manhattan&quot;</span>, </span>
+<span id="cb21-17"><a href="#cb21-17"></a>                      <span class="st">&quot;10010&quot;</span> =<span class="st"> &quot;Gramercy Park and Murray Hill&quot;</span>,</span>
+<span id="cb21-18"><a href="#cb21-18"></a>                      <span class="st">&quot;10016&quot;</span> =<span class="st"> &quot;Gramercy Park and Murray Hill&quot;</span>,</span>
+<span id="cb21-19"><a href="#cb21-19"></a>                      <span class="st">&quot;10017&quot;</span> =<span class="st"> &quot;Gramercy Park and Murray Hill&quot;</span>,</span>
+<span id="cb21-20"><a href="#cb21-20"></a>                      <span class="st">&quot;10022&quot;</span> =<span class="st"> &quot;Gramercy Park and Murray Hill&quot;</span>,</span>
+<span id="cb21-21"><a href="#cb21-21"></a>                      <span class="st">&quot;10012&quot;</span> =<span class="st"> &quot;Greenwich Village and Soho&quot;</span>,</span>
+<span id="cb21-22"><a href="#cb21-22"></a>                      <span class="st">&quot;10013&quot;</span> =<span class="st"> &quot;Greenwich Village and Soho&quot;</span>,</span>
+<span id="cb21-23"><a href="#cb21-23"></a>                      <span class="st">&quot;10014&quot;</span> =<span class="st"> &quot;Greenwich Village and Soho&quot;</span>,</span>
+<span id="cb21-24"><a href="#cb21-24"></a>                      <span class="st">&quot;10021&quot;</span> =<span class="st"> &quot;Upper East Side&quot;</span>,</span>
+<span id="cb21-25"><a href="#cb21-25"></a>                      <span class="st">&quot;10028&quot;</span> =<span class="st"> &quot;Upper East Side&quot;</span>,</span>
+<span id="cb21-26"><a href="#cb21-26"></a>                      <span class="st">&quot;10065&quot;</span> =<span class="st"> &quot;Upper East Side&quot;</span>,</span>
+<span id="cb21-27"><a href="#cb21-27"></a>                      <span class="st">&quot;10075&quot;</span> =<span class="st"> &quot;Upper East Side&quot;</span>,</span>
+<span id="cb21-28"><a href="#cb21-28"></a>                      <span class="st">&quot;10128&quot;</span> =<span class="st"> &quot;Upper East Side&quot;</span>,</span>
+<span id="cb21-29"><a href="#cb21-29"></a>                      <span class="st">&quot;10023&quot;</span> =<span class="st"> &quot;Upper West Side&quot;</span>,</span>
+<span id="cb21-30"><a href="#cb21-30"></a>                      <span class="st">&quot;10024&quot;</span> =<span class="st"> &quot;Upper West Side&quot;</span>,</span>
+<span id="cb21-31"><a href="#cb21-31"></a>                      <span class="st">&quot;10025&quot;</span> =<span class="st"> &quot;Upper West Side&quot;</span>,</span>
+<span id="cb21-32"><a href="#cb21-32"></a>                      <span class="st">&quot;10035&quot;</span> =<span class="st"> &quot;Undefined Borough&quot;</span>,</span>
+<span id="cb21-33"><a href="#cb21-33"></a>                      <span class="st">&quot;10168&quot;</span> =<span class="st"> &quot;Gramercy Park and Murray Hill&quot;</span>,</span>
+<span id="cb21-34"><a href="#cb21-34"></a>                      <span class="st">&quot;10166&quot;</span> =<span class="st"> &quot;Undefined Borough&quot;</span>,</span>
+<span id="cb21-35"><a href="#cb21-35"></a>                      <span class="st">&quot;10112&quot;</span> =<span class="st"> &quot;Undefined Borough&quot;</span>,</span>
+<span id="cb21-36"><a href="#cb21-36"></a>                      <span class="st">&quot;10041&quot;</span> =<span class="st"> &quot;Undefined Borough&quot;</span>))</span></code></pre></div>
+<p>Now that we have our data divided into boroughs we can ask our first question.</p>
+<div id="which-borough-of-manhattan-has-the-greatest-number-of-pizza-resturants" class="section level4">
+<h4><strong><em>Which borough of Manhattan has the greatest number of pizza resturants?</em></strong></h4>
+<p>Lets take a look at the new data to find out! Start by reordering by borough_name so resulting plot appears organized.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">glimpse</span>(nypizzabyborough)</span></code></pre></div>
+<pre><code>## Observations: 251
+## Variables: 23
+## $ name                                 &lt;chr&gt; &quot;99 Cent Fresh Pizza&quot;, &quot;N...
+## $ address1                             &lt;chr&gt; &quot;473 Lexington Ave&quot;, &quot;39 ...
+## $ city                                 &lt;chr&gt; &quot;New York&quot;, &quot;New York&quot;, &quot;...
+## $ zip                                  &lt;chr&gt; &quot;10017&quot;, &quot;10036&quot;, &quot;10003&quot;...
+## $ country                              &lt;chr&gt; &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;...
+## $ latitude                             &lt;dbl&gt; 40.75370, 40.75690, 40.73...
+## $ longitude                            &lt;dbl&gt; -73.97411, -73.98052, -73...
+## $ price_level                          &lt;dbl&gt; 1, 2, 2, 1, 1, 1, 2, 2, 2...
+## $ provider_rating                      &lt;dbl&gt; 4.0, 4.0, 3.0, 3.5, 3.0, ...
+## $ provider_review_count                &lt;dbl&gt; 118, 1055, 143, 28, 95, 3...
+## $ review_stats_all_average_score       &lt;dbl&gt; 5.666667, 5.600000, 7.100...
+## $ review_stats_all_count               &lt;dbl&gt; 9, 2, 1, 4, 5, 17, 14, 6,...
+## $ review_stats_all_total_score         &lt;dbl&gt; 51.0, 11.2, 7.1, 16.3, 30...
+## $ review_stats_community_average_score &lt;dbl&gt; 5.762500, 0.000000, 0.000...
+## $ review_stats_community_count         &lt;dbl&gt; 8, 0, 0, 3, 4, 16, 13, 4,...
+## $ review_stats_community_total_score   &lt;dbl&gt; 46.1, 0.0, 0.0, 13.1, 24....
+## $ review_stats_critic_average_score    &lt;dbl&gt; 0.0, 4.3, 0.0, 0.0, 0.0, ...
+## $ review_stats_critic_count            &lt;dbl&gt; 0, 1, 0, 0, 0, 0, 0, 1, 0...
+## $ review_stats_critic_total_score      &lt;dbl&gt; 0.0, 4.3, 0.0, 0.0, 0.0, ...
+## $ review_stats_dave_average_score      &lt;dbl&gt; 4.9, 6.9, 7.1, 3.2, 6.1, ...
+## $ review_stats_dave_count              &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1...
+## $ review_stats_dave_total_score        &lt;dbl&gt; 4.9, 6.9, 7.1, 3.2, 6.1, ...
+## $ borough_name                         &lt;chr&gt; &quot;Gramercy Park and Murray...</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>nypizzabyborough<span class="op">$</span>borough_name &lt;-<span class="st"> </span><span class="kw">fct_infreq</span>(nypizzabyborough<span class="op">$</span>borough_name)</span></code></pre></div>
+<p>Now we plot by borough!</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>nypizzaboroughplot &lt;-<span class="st"> </span>nypizzabyborough <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="st">     </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> borough_name, <span class="dt">fill =</span> borough_name), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb25-3"><a href="#cb25-3"></a></span>
+<span id="cb25-4"><a href="#cb25-4"></a>boroughplot_<span class="dv">1</span> &lt;-<span class="st"> </span>nypizzaboroughplot <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>), <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="st">&quot;grey85&quot;</span>), <span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey40&quot;</span>), <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey40&quot;</span>), <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;NY Pizza Places by Borough&quot;</span>, <span class="dt">subtitle =</span> <span class="st">&quot;as evaluated by barstool sports, borough names designated by NY state department of health&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;Borough Name&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Total Pizza Resturants&quot;</span>)</span>
+<span id="cb25-5"><a href="#cb25-5"></a></span>
+<span id="cb25-6"><a href="#cb25-6"></a>boroughplot_<span class="dv">1</span></span></code></pre></div>
+<p><img src="TidyTuesday1index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The resulting plot shows a nice spread of pizza resturants by borough name. Chelsea and Clinton has the greatest concentration of pizza resturants within the zip code range (at least those measured in this study) so these data suggest that would be a good borough to look for some pizza!</p>
+<p>Pizza resturant numbers are interesting, but realistically people are usually more concerned about finding the best pizza. This leads us to our second question for the data.</p>
+</div>
+<div id="which-manhattan-borough-has-the-highest-number-of-highly-rated-pizza-resturants" class="section level4">
+<h4><strong><em>Which Manhattan borough has the highest number of highly rated pizza resturants?</em></strong></h4>
+<p>We can compare our borough subgroups by placing them into a stacked bar chart by the provider_rating score in the dataset.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>nypizzabyborough <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> provider_rating, <span class="dt">fill =</span> borough_name)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>, <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey40&quot;</span>), <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey40&quot;</span>), <span class="dt">legend.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="fl">8.5</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="fl">0.3</span>, <span class="st">&quot;cm&quot;</span>), <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">legend.title =</span> <span class="kw">element_blank</span>(), <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>)) <span class="op">+</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Provider Ranking&quot;</span>) <span class="op">+</span></span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Number of Pizza Resturants&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Which Manhattan Borough Has The Best Pizza Resturants?&quot;</span>)</span></code></pre></div>
+<p><img src="TidyTuesday1index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Based on provider ratings, we can see that pizza resturant quality is reasonably distrubuted across the Manhattan Boroughs. Though Chelsea and Clintin held the highest total number of pizza resturants, it appears that the Greenwich Village and Soho has a greater number of highly ranked pizza resturants.</p>
+<p>Next, lets see how the barstool and jared ratings stack up to one another when compared. In the TidyTuesday ReadMe it was mentioned that the barstool and jared datasets have 22 pizza resturants which overlap. This leads to our third question.</p>
+</div>
+<div id="how-does-the-barstool-rating-data-compare-to-the-jared-rating-data" class="section level4">
+<h4><strong><em>How does the barstool rating data compare to the jared rating data?</em></strong></h4>
+<p>To address this question, we will first need to reformat our data from both data sets so they can be combined to produce visuals.</p>
+<p>First of all, pizza_jared has lots of zero values because of the method data was recorded via the likert scale. Lets remove any values that have zero votes so they are not counted as part of the data sets downstream.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>corrected_jared &lt;-<span class="st"> </span><span class="kw">subset</span>(pizza_jared, votes <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+<p>Next we need to be able to compare the data sets. We can recode the likert scale in jared_rating to the same numeric scale used in provider_ratings for the barstool data so we can compare them. Then we merge by names to get a new data set to work with.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">glimpse</span>(pizza_jared)</span></code></pre></div>
+<pre><code>## Observations: 375
+## Variables: 9
+## $ polla_qid   &lt;dbl&gt; 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5,...
+## $ answer      &lt;chr&gt; &quot;Excellent&quot;, &quot;Good&quot;, &quot;Average&quot;, &quot;Poor&quot;, &quot;Never Aga...
+## $ votes       &lt;dbl&gt; 0, 6, 4, 1, 2, 1, 1, 3, 1, 1, 4, 2, 1, 1, 0, 1, 1,...
+## $ pollq_id    &lt;dbl&gt; 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5,...
+## $ question    &lt;chr&gt; &quot;How was Pizza Mercato?&quot;, &quot;How was Pizza Mercato?&quot;...
+## $ place       &lt;chr&gt; &quot;Pizza Mercato&quot;, &quot;Pizza Mercato&quot;, &quot;Pizza Mercato&quot;,...
+## $ time        &lt;dbl&gt; 1344361527, 1344361527, 1344361527, 1344361527, 13...
+## $ total_votes &lt;dbl&gt; 13, 13, 13, 13, 13, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, ...
+## $ percent     &lt;dbl&gt; 0.0000, 0.4615, 0.3077, 0.0769, 0.1538, 0.1429, 0....</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>mutatejared &lt;-<span class="st"> </span>corrected_jared <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">name =</span> place)</span>
+<span id="cb30-2"><a href="#cb30-2"></a></span>
+<span id="cb30-3"><a href="#cb30-3"></a>mutatejared_<span class="dv">2</span> &lt;-<span class="st"> </span>mutatejared <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">jared_rating =</span> <span class="kw">recode</span>(answer,</span>
+<span id="cb30-4"><a href="#cb30-4"></a>                                                         <span class="st">&quot;Never Again&quot;</span> =<span class="st"> </span><span class="dv">0</span>,</span>
+<span id="cb30-5"><a href="#cb30-5"></a>                                                         <span class="st">&quot;Poor&quot;</span> =<span class="st"> </span><span class="dv">1</span>,</span>
+<span id="cb30-6"><a href="#cb30-6"></a>                                                         <span class="st">&quot;Fair&quot;</span> =<span class="st"> </span><span class="dv">2</span>,</span>
+<span id="cb30-7"><a href="#cb30-7"></a>                                                         <span class="st">&quot;Average&quot;</span> =<span class="st"> </span><span class="dv">3</span>,</span>
+<span id="cb30-8"><a href="#cb30-8"></a>                                                         <span class="st">&quot;Good&quot;</span> =<span class="st"> </span><span class="dv">4</span>,</span>
+<span id="cb30-9"><a href="#cb30-9"></a>                                                         <span class="st">&quot;Excellent&quot;</span> =<span class="st"> </span><span class="dv">5</span>))</span>
+<span id="cb30-10"><a href="#cb30-10"></a></span>
+<span id="cb30-11"><a href="#cb30-11"></a>jared_and_barstool_join &lt;-<span class="st"> </span><span class="kw">merge</span>(mutatejared_<span class="dv">2</span>, pizza_barstool, <span class="dt">by =</span> <span class="st">&quot;name&quot;</span>)</span>
+<span id="cb30-12"><a href="#cb30-12"></a></span>
+<span id="cb30-13"><a href="#cb30-13"></a><span class="kw">glimpse</span>(jared_and_barstool_join)</span></code></pre></div>
+<pre><code>## Observations: 143
+## Variables: 32
+## $ name                                 &lt;chr&gt; &quot;5 Boroughs Pizza&quot;, &quot;5 Bo...
+## $ polla_qid                            &lt;dbl&gt; 57, 57, 39, 39, 39, 39, 3...
+## $ answer                               &lt;chr&gt; &quot;Average&quot;, &quot;Excellent&quot;, &quot;...
+## $ votes                                &lt;dbl&gt; 2, 1, 4, 1, 4, 1, 1, 3, 2...
+## $ pollq_id                             &lt;dbl&gt; 57, 57, 39, 39, 39, 39, 3...
+## $ question                             &lt;chr&gt; &quot;How was 5 Boroughs Pizza...
+## $ place                                &lt;chr&gt; &quot;5 Boroughs Pizza&quot;, &quot;5 Bo...
+## $ time                                 &lt;dbl&gt; 1513264990, 1513264990, 1...
+## $ total_votes                          &lt;dbl&gt; 3, 3, 10, 10, 10, 10, 7, ...
+## $ percent                              &lt;dbl&gt; 0.6667, 0.3333, 0.4000, 0...
+## $ jared_rating                         &lt;dbl&gt; 3, 5, 5, 1, 4, 3, 1, 4, 5...
+## $ address1                             &lt;chr&gt; &quot;386 Canal St&quot;, &quot;386 Cana...
+## $ city                                 &lt;chr&gt; &quot;New York&quot;, &quot;New York&quot;, &quot;...
+## $ zip                                  &lt;dbl&gt; 10013, 10013, 10011, 1001...
+## $ country                              &lt;chr&gt; &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;...
+## $ latitude                             &lt;dbl&gt; 40.72129, 40.72129, 40.74...
+## $ longitude                            &lt;dbl&gt; -74.00497, -74.00497, -74...
+## $ price_level                          &lt;dbl&gt; 1, 1, 2, 2, 2, 2, 2, 2, 2...
+## $ provider_rating                      &lt;dbl&gt; 3.5, 3.5, 3.5, 3.5, 3.5, ...
+## $ provider_review_count                &lt;dbl&gt; 25, 25, 1454, 1454, 1454,...
+## $ review_stats_all_average_score       &lt;dbl&gt; 4.325000, 4.325000, 7.878...
+## $ review_stats_all_count               &lt;dbl&gt; 4, 4, 33, 33, 33, 33, 9, ...
+## $ review_stats_all_total_score         &lt;dbl&gt; 17.3, 17.3, 260.0, 260.0,...
+## $ review_stats_community_average_score &lt;dbl&gt; 4.633333, 4.633333, 7.878...
+## $ review_stats_community_count         &lt;dbl&gt; 3, 3, 32, 32, 32, 32, 7, ...
+## $ review_stats_community_total_score   &lt;dbl&gt; 13.9, 13.9, 252.1, 252.1,...
+## $ review_stats_critic_average_score    &lt;dbl&gt; 0.0, 0.0, 0.0, 0.0, 0.0, ...
+## $ review_stats_critic_count            &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 1, 1, 1...
+## $ review_stats_critic_total_score      &lt;dbl&gt; 0.0, 0.0, 0.0, 0.0, 0.0, ...
+## $ review_stats_dave_average_score      &lt;dbl&gt; 3.4, 3.4, 7.9, 7.9, 7.9, ...
+## $ review_stats_dave_count              &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1...
+## $ review_stats_dave_total_score        &lt;dbl&gt; 3.4, 3.4, 7.9, 7.9, 7.9, ...</code></pre>
+<p>It looks like that mutate worked to remove any zero vote values but, we will have trouble down the line the way this information is formatted in the data frame. The fact that multiple observations are recorded under one observation will skew the data towards rating scores that received fewer votes. Overall, we are looking for the mean score 0-5 for each of the resturants in the pizza_jared dataframe that overlap with the pizza_barstool dataframe. To do this we will create a new data frame from the cleaned data simply containing the resturant name, total votes, total score (out of 5), and the mean score.</p>
+<p>We start by pulling out the total votes for each resturant using aggregate, then rename the new variables to something sensible.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>total_votes &lt;-<span class="st"> </span><span class="kw">aggregate</span>(jared_and_barstool_join[, <span class="dv">4</span>], <span class="kw">list</span>(jared_and_barstool_join<span class="op">$</span>name), sum)</span>
+<span id="cb32-2"><a href="#cb32-2"></a></span>
+<span id="cb32-3"><a href="#cb32-3"></a>workingdf &lt;-<span class="st"> </span>total_votes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">name =</span> Group<span class="fl">.1</span>, <span class="dt">total_votes =</span> x)</span></code></pre></div>
+<p>Next we pull out the total score from each resturant. We must first multiply by the number of votes, then sum the values based on the name of the pizza resturant.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>add_total_score &lt;-<span class="st"> </span>jared_and_barstool_join <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">total_score =</span> jared_rating <span class="op">*</span><span class="st"> </span>votes)</span>
+<span id="cb33-2"><a href="#cb33-2"></a></span>
+<span id="cb33-3"><a href="#cb33-3"></a>agg_total_score &lt;-<span class="st"> </span><span class="kw">aggregate</span>(add_total_score[, <span class="dv">33</span>], <span class="kw">list</span>(add_total_score<span class="op">$</span>name), sum)</span>
+<span id="cb33-4"><a href="#cb33-4"></a></span>
+<span id="cb33-5"><a href="#cb33-5"></a>workingdf_<span class="dv">2</span> &lt;-<span class="st"> </span>agg_total_score <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">name =</span> Group<span class="fl">.1</span>, <span class="dt">total_score =</span> x)</span></code></pre></div>
+<p>Lastly, we combine the total votes, total scores, and compute the mean value for score for each resturant in a new data frame.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>workingdf_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">merge</span>(workingdf, workingdf_<span class="dv">2</span>, <span class="dt">by =</span> <span class="st">&quot;name&quot;</span>)</span>
+<span id="cb34-2"><a href="#cb34-2"></a></span>
+<span id="cb34-3"><a href="#cb34-3"></a>corrected_jared_mean_score &lt;-<span class="st"> </span>workingdf_<span class="dv">3</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mean_score =</span> total_score <span class="op">/</span><span class="st"> </span>total_votes)</span></code></pre></div>
+<p>For simplicity sake, lets make a new data frame for the provider rating for pizza_barstool so we do not have to deal with a data frame that has 32 variables when we only need a couple. There are some replicate observations of some resturants so we will aggregate provider_rating to get an average score.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>barstool_short &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;name&quot;</span> =<span class="st"> </span>jared_and_barstool_join<span class="op">$</span>name, </span>
+<span id="cb35-2"><a href="#cb35-2"></a>          <span class="st">&quot;provider_rating&quot;</span> =<span class="st"> </span>jared_and_barstool_join<span class="op">$</span>provider_rating)</span>
+<span id="cb35-3"><a href="#cb35-3"></a></span>
+<span id="cb35-4"><a href="#cb35-4"></a>barstool_collapse &lt;-<span class="st"> </span>barstool_short <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(name, provider_rating)</span>
+<span id="cb35-5"><a href="#cb35-5"></a></span>
+<span id="cb35-6"><a href="#cb35-6"></a>barstool_collapse_mean &lt;-<span class="st"> </span><span class="kw">aggregate</span>(barstool_collapse[, <span class="dv">2</span>], <span class="kw">list</span>(barstool_collapse<span class="op">$</span>name), mean)</span>
+<span id="cb35-7"><a href="#cb35-7"></a></span>
+<span id="cb35-8"><a href="#cb35-8"></a>corrected_barstool_mean_score &lt;-<span class="st"> </span>barstool_collapse_mean <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">name =</span> Group<span class="fl">.1</span>, <span class="dt">provider_rating =</span> x)</span></code></pre></div>
+<p>Now we can take a look at the graphs of the rating scores from pizza_jared and pizza_barstool.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">ggplot</span>(corrected_barstool_mean_score, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(name, <span class="op">-</span>provider_rating), <span class="dt">y =</span> provider_rating, <span class="dt">fill =</span> name)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_summary</span>(<span class="dt">fun.y=</span><span class="st">&quot;mean&quot;</span>, <span class="dt">geom=</span><span class="st">&quot;bar&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="TidyTuesday1index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">ggplot</span>(corrected_jared_mean_score, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">reorder</span>(name, <span class="op">-</span>mean_score), <span class="dt">y =</span> mean_score, <span class="dt">fill =</span> name)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_summary</span>(<span class="dt">fun.y=</span><span class="st">&quot;mean&quot;</span>, <span class="dt">geom=</span><span class="st">&quot;bar&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">scale_x_discrete</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="st">&quot;Prince Street Pizza&quot;</span>, <span class="st">&quot;Champion Pizza&quot;</span>, <span class="st">&quot;NY Pizza Suprema&quot;</span>, <span class="st">&quot;Saluggi&#39;s&quot;</span>, <span class="st">&quot;Kiss My Slice&quot;</span>, <span class="st">&quot;Highline Pizza&quot;</span>, <span class="st">&quot;Pizza Italia&quot;</span>, <span class="st">&quot;Previti Pizza&quot;</span>, <span class="st">&quot;Arturo&#39;s&quot;</span>, <span class="st">&quot;Bleecker Street Pizza&quot;</span>, <span class="st">&quot;Little Italy Pizza&quot;</span>, <span class="st">&quot;Rocco&#39;s Pizza Joint&quot;</span>, <span class="st">&quot;Steve&#39;s Pizza&quot;</span>, <span class="st">&quot;Artichoke Basille&#39;s Pizza&quot;</span>, <span class="st">&quot;Gotham Pizza&quot;</span>, <span class="st">&quot;Rivoli Pizza&quot;</span>, <span class="st">&quot;Vinny Vincenz&quot;</span>, <span class="st">&quot;Girello&quot;</span>, <span class="st">&quot;5 Boroughs Pizza&quot;</span>, <span class="st">&quot;Joe&#39;s Pizza&quot;</span>, <span class="st">&quot;Williamsburg Pizza&quot;</span>, <span class="st">&quot;Stella&#39;s Pizza&quot;</span>))</span></code></pre></div>
+<p><img src="TidyTuesday1index_files/figure-html/unnamed-chunk-18-2.png" width="672" /></p>
+<p>This is moderately informative, but it would be best if we could get the bars side by side so it is not difficult to read and the colors match.To do this we need all of our data in one dataframe.</p>
+<p>Start by adding a source variable to each of our data frames so we can reference where they came from. Then we need to standardize our rating variable so we can merge the two data frames.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>barstool_source &lt;-<span class="st"> </span>corrected_barstool_mean_score <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">source =</span> <span class="st">&quot;Barstool&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">rating_score =</span> provider_rating)</span>
+<span id="cb38-2"><a href="#cb38-2"></a></span>
+<span id="cb38-3"><a href="#cb38-3"></a>jared_source &lt;-<span class="st"> </span>corrected_jared_mean_score <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">source =</span> <span class="st">&quot;Jared&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">rating_score =</span> mean_score)</span></code></pre></div>
+<p>Now that we have like variables we merge by rating score so we can compare the two, keeping the all = TRUE so we do not abandon any values that happen to be the same numerically. The variables we needed did not merge as successfully as expected (I am still unsure as to why) but we did succeed in combining the data frame. From here, we can correct our mismatched variables by creating new ones and coalescing. As a result there will be some vestigial variable as a result. NAs will be generated as variables from each individual data set will not directly translate over, but for this plot those will not serve as the data source.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>final_plot &lt;-<span class="st"> </span><span class="kw">merge</span>(barstool_source, jared_source, <span class="dt">by =</span> <span class="st">&quot;rating_score&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="dt">all =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## Warning in `[&lt;-.factor`(`*tmp*`, ri, value = c(3.66666666666667, 4,
+## 3.71428571428571, : invalid factor level, NA generated</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>final_plot<span class="op">$</span>name &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">as.character</span>(final_plot<span class="op">$</span>name))</span>
+<span id="cb41-2"><a href="#cb41-2"></a>final_plot<span class="op">$</span>name.y &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">as.character</span>(final_plot<span class="op">$</span>name.y))</span>
+<span id="cb41-3"><a href="#cb41-3"></a></span>
+<span id="cb41-4"><a href="#cb41-4"></a>name_fix_final &lt;-<span class="st"> </span>final_plot <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">resturant_name =</span> <span class="kw">coalesce</span>(name, name.y)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">source_proper =</span> <span class="kw">coalesce</span>(source.x, source.y)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">rating_score_proper =</span> <span class="kw">coalesce</span>(rating_score, mean_score))</span></code></pre></div>
+<p>Now we make the plot!</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>name_fix_final <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-2"><a href="#cb42-2"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">x =</span> resturant_name, <span class="dt">y =</span> rating_score_proper, <span class="dt">fill =</span> source_proper ), <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-3"><a href="#cb42-3"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>), <span class="dt">legend.position =</span> <span class="st">&quot;right&quot;</span>, <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey40&quot;</span>), <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey40&quot;</span>), <span class="dt">legend.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="fl">8.5</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="fl">0.3</span>, <span class="st">&quot;cm&quot;</span>), <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">legend.title =</span> <span class="kw">element_blank</span>(), <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Average Rating Score&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="TidyTuesday1index_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>With this plot we can compare and contrast the individual ratings for each pizza resturant with both the average score from barstool and jared data. Scores look pretty consistent across the board however, there are a few resturants which barstool scores a decent bit higher for (Prince Street Pizza, Previti Pizza, and Champion Pizza) and one where jared scored higher (Williamsburg Pizza).</p>
+<p>It is still a little difficult to visualize the overall trends of the data with this plot, so we will try some alternate forms.</p>
+<p>First, we start with a dotplot.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>name_fix_final <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_dotplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> rating_score_proper, <span class="dt">fill =</span> source_proper), <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">binwidth =</span> <span class="fl">0.1</span>, <span class="dt">stackgroups =</span> <span class="ot">TRUE</span>, <span class="dt">binpositions =</span> <span class="st">&quot;all&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>), <span class="dt">legend.position =</span> <span class="st">&quot;right&quot;</span>, <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">legend.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="fl">10.5</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>), <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">legend.title =</span> <span class="kw">element_blank</span>(), <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.line =</span> <span class="kw">element_line</span>(        <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">linetype =</span> <span class="st">&quot;solid&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;Average Rating Scores&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="kw">ggtitle</span>(<span class="st">&quot;Frequency of Rating Scores by Barstool and Jared Rating&quot;</span>)</span></code></pre></div>
+<p><img src="TidyTuesday1index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>The dotplot of the combined data shows the individual average data points very nicely. It appears that barstool seems to assign higher ratings more frequently than jared does based on the distribution of dots in this plot.</p>
+<p>Now lets try a density plot.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>name_fix_final <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">x =</span> rating_score_proper, <span class="dt">fill =</span> source_proper), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>), <span class="dt">legend.position =</span> <span class="st">&quot;right&quot;</span>, <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey40&quot;</span>), <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">color =</span> <span class="st">&quot;grey40&quot;</span>), <span class="dt">legend.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="fl">8.5</span>, <span class="dt">face =</span> <span class="st">&quot;bold&quot;</span>), <span class="dt">legend.key.size =</span> <span class="kw">unit</span>(<span class="fl">0.3</span>, <span class="st">&quot;cm&quot;</span>), <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">legend.title =</span> <span class="kw">element_blank</span>(), <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>), <span class="dt">plot.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&quot;grey85&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;Average Rating Scores&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Frequency&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Frequency of Rating Scores by Barstool and Jared Ratings&quot;</span>)</span></code></pre></div>
+<p><img src="TidyTuesday1index_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>Here we see the distrubtion of the average scores assigned by both raters. As suggested by the dot plot it appears that barstool does indeed assign higher ratings more frequently. Both data sets assign scores between 3.25 and 4.2 most frequently, however jared rating assigns lower score values (3 or below) more frequently than barstool does. Both raters assign above 4.25 very infrequently.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

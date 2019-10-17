@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="William Norfolk" />
+
+
+<title>WilliamNorfolk-Visualization Fandango Data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  { color: #cccccc; background-color: #303030; }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffcfaf; } /* Alert */
+code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #dca3a3; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #f0dfaf; } /* ControlFlow */
+code span.ch { color: #dca3a3; } /* Char */
+code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+code span.co { color: #7f9f7f; } /* Comment */
+code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+code span.do { color: #7f9f7f; } /* Documentation */
+code span.dt { color: #dfdfbf; } /* DataType */
+code span.dv { color: #dcdccc; } /* DecVal */
+code span.er { color: #c3bf9f; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #c0bed1; } /* Float */
+code span.fu { color: #efef8f; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+code span.kw { color: #f0dfaf; } /* Keyword */
+code span.op { color: #f0efd0; } /* Operator */
+code span.ot { color: #efef8f; } /* Other */
+code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+code span.sc { color: #dca3a3; } /* SpecialChar */
+code span.ss { color: #cc9393; } /* SpecialString */
+code span.st { color: #cc9393; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #cc9393; } /* VerbatimString */
+code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="customstyles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Data Analysis Exercise Website-William Norfolk</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Analyses
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="./Continuous_Outcome_Analysis.html">Continuous Outcome Analysis</a>
+    </li>
+    <li class="dropdown-header">Future Analysis</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Completed Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Coding Exercise</li>
+    <li>
+      <a href="./WilliamNorfolk_Coding.html"></a>
+    </li>
+    <li class="dropdown-header">TidyTuesday1 Exercise</li>
+    <li>
+      <a href="./TidyTuesday1index.html"></a>
+    </li>
+    <li class="dropdown-header">Visualization Exercise</li>
+    <li>
+      <a href="./Visualization_index.html"></a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="./Author.html">About the Author</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/epid8060fall2019/William-Norfolk-Data-Analysis">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">WilliamNorfolk-Visualization Fandango Data</h1>
+<h4 class="author">William Norfolk</h4>
+<h4 class="date">9/21/2019</h4>
+
+</div>
+
+
+<p>Load all packages needed for data upload and cleaning methods.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(readr)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(knitr)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(ggthemes)</span></code></pre></div>
+<p>Here is the original image we are trying to recreate and the link to the article where it was originally published.</p>
+<p><a href="https://fivethirtyeight.com/features/fandango-movies-ratings/">Be Suspicious of Online Movie Ratings, Especially Fandango’s</a></p>
+<p><img src="fandangooriginal.png" width="75%" height="75%" style="display: block; margin: auto;" /></p>
+<p>Download data from GitHub and copy data files into the project directory (i.e. put them in the same folder as the project) to set a path.</p>
+<p>Set the working directory to the project directory to R can access the data.</p>
+<p>Our data file is in a nicely packed csv file so we will use the read.csv function. The header function reads the first line of the data set and interprets th information as the titles for each variable. A quick glance at the raw data and we see the header is indeed present so we will keep header logic TRUE. And finally, we will keep our data seperated by a comma.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>moviedata &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;./fandango_score_comparison.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+<p>Take a look at the data to see the variable names, observations, variable classes, and all around what you are working with.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">glimpse</span>(moviedata)</span></code></pre></div>
+<pre><code>## Observations: 146
+## Variables: 22
+## $ FILM                       &lt;fct&gt; &quot;Avengers: Age of Ultron (2015)&quot;, &quot;...
+## $ RottenTomatoes             &lt;int&gt; 74, 85, 80, 18, 14, 63, 42, 86, 99,...
+## $ RottenTomatoes_User        &lt;int&gt; 86, 80, 90, 84, 28, 62, 53, 64, 82,...
+## $ Metacritic                 &lt;int&gt; 66, 67, 64, 22, 29, 50, 53, 81, 81,...
+## $ Metacritic_User            &lt;dbl&gt; 7.1, 7.5, 8.1, 4.7, 3.4, 6.8, 7.6, ...
+## $ IMDB                       &lt;dbl&gt; 7.8, 7.1, 7.8, 5.4, 5.1, 7.2, 6.9, ...
+## $ Fandango_Stars             &lt;dbl&gt; 5.0, 5.0, 5.0, 5.0, 3.5, 4.5, 4.0, ...
+## $ Fandango_Ratingvalue       &lt;dbl&gt; 4.5, 4.5, 4.5, 4.5, 3.0, 4.0, 3.5, ...
+## $ RT_norm                    &lt;dbl&gt; 3.70, 4.25, 4.00, 0.90, 0.70, 3.15,...
+## $ RT_user_norm               &lt;dbl&gt; 4.30, 4.00, 4.50, 4.20, 1.40, 3.10,...
+## $ Metacritic_norm            &lt;dbl&gt; 3.30, 3.35, 3.20, 1.10, 1.45, 2.50,...
+## $ Metacritic_user_nom        &lt;dbl&gt; 3.55, 3.75, 4.05, 2.35, 1.70, 3.40,...
+## $ IMDB_norm                  &lt;dbl&gt; 3.90, 3.55, 3.90, 2.70, 2.55, 3.60,...
+## $ RT_norm_round              &lt;dbl&gt; 3.5, 4.5, 4.0, 1.0, 0.5, 3.0, 2.0, ...
+## $ RT_user_norm_round         &lt;dbl&gt; 4.5, 4.0, 4.5, 4.0, 1.5, 3.0, 2.5, ...
+## $ Metacritic_norm_round      &lt;dbl&gt; 3.5, 3.5, 3.0, 1.0, 1.5, 2.5, 2.5, ...
+## $ Metacritic_user_norm_round &lt;dbl&gt; 3.5, 4.0, 4.0, 2.5, 1.5, 3.5, 4.0, ...
+## $ IMDB_norm_round            &lt;dbl&gt; 4.0, 3.5, 4.0, 2.5, 2.5, 3.5, 3.5, ...
+## $ Metacritic_user_vote_count &lt;int&gt; 1330, 249, 627, 31, 88, 34, 17, 124...
+## $ IMDB_user_vote_count       &lt;int&gt; 271107, 65709, 103660, 3136, 19560,...
+## $ Fandango_votes             &lt;int&gt; 14846, 12640, 12055, 1793, 1021, 39...
+## $ Fandango_Difference        &lt;dbl&gt; 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, ...</code></pre>
+<p>Looking at the published figure at first glance it looks like a density plot, so let’s try to recreate the conditions for on piece of the data. I selected the Metacritic data for this example, but any of the included variables would work.</p>
+<p>After some guess and check (not displayed here) the different components of the mapping and asthetics can be determined by generating a number of plots with small changes in the code in effort to match the published figure.</p>
+<p>The code below shows the results of this guess and check process to produce a geom_density plot that resembles the published figure.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>testplot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(moviedata, <span class="kw">aes</span>(Metacritic_norm_round)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_density</span>(<span class="dt">stat =</span> <span class="st">&quot;bin&quot;</span>, <span class="dt">binwidth =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_x_continuous</span>(<span class="dt">name =</span> <span class="st">&quot;Number of Stars&quot;</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">5</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">scale_y_continuous</span>(<span class="dt">name =</span> <span class="st">&quot;Percent&quot;</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">40</span>))</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>testplot</span></code></pre></div>
+<p><img src="Visualization_index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The mapping and aesthetics look similar to the published figure, so now we apply the same details to all of the variable in the figure. In addition, colors, shading, and fade (alpha) are added to match the published figure.</p>
+<p>Arguments Used:</p>
+<p>stat = the statistical transformation that will be used on the data</p>
+<p>binwidth = size of the bins used only with the “bin” stat (this is how the smooth lines of geom_density were converted to sharp lines)</p>
+<p>color = the color of the density curve line</p>
+<p>fill = the color of the filled area below the density curve</p>
+<p>alpha = fades the colors so the increase in intensity when overlapping</p>
+<p>size = thickness of the curve line</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>mastergeom_density &lt;-<span class="st"> </span>moviedata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Metacritic_norm_round), <span class="dt">stat =</span> <span class="st">&quot;bin&quot;</span>, <span class="dt">binwidth =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">x =</span> RT_norm_round), <span class="dt">stat =</span> <span class="st">&quot;bin&quot;</span>, <span class="dt">binwidth =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;grey20&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">x =</span> IMDB_norm_round), <span class="dt">stat =</span> <span class="st">&quot;bin&quot;</span>, <span class="dt">binwidth =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;yellow&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Metacritic_user_norm_round),<span class="dt">stat =</span> <span class="st">&quot;bin&quot;</span>, <span class="dt">binwidth =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;green&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">x =</span> RT_user_norm_round), <span class="dt">stat =</span> <span class="st">&quot;bin&quot;</span>, <span class="dt">binwidth =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;cyan3&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Fandango_Stars), <span class="dt">stat =</span> <span class="st">&quot;bin&quot;</span>, <span class="dt">binwidth =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;orangered1&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;orangered1&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.25</span>, <span class="dt">size =</span> <span class="fl">0.75</span>)</span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a>mastergeom_density</span></code></pre></div>
+<p><img src="Visualization_index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Finally, we replicate the labels and title/subtitle from the published figure.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>mastergeom_density <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Fandango LOVES Movies&quot;</span>, <span class="dt">subtitle =</span> <span class="st">&quot;Normalized ratings distribution of 146 films in theaters in 2015 that had 30+ reviews on Fandango.com&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Number of Stars&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_y_continuous</span>(<span class="dt">name =</span> <span class="st">&quot;Percent&quot;</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">70</span>))</span></code></pre></div>
+<p><img src="Visualization_index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>This figure looks pretty close to the published figure, however the y-axis is troubling. In the code above the axis was named percent, but it appears the figure is still displaying counts here as IMDB Users variable should only slightly extend above 40%.</p>
+<p>To solve this issue, the y-axis must be scaled to percent based on the counts of the data. The easiest way to acomplish this is to change the stat argument in geom_density and then scale_y_axis to labels = scales::percent_format to ensure the shape of the figure is maintained. However if this is done with the above figure you lose all of the sharp lines in the density curve because you lose the “binwidth” argument. The resulting figure is reminiscent of the correct figure but the lines for each variable are smooth.</p>
+<p>To solve this issue the entire figure must be revisited. At second glance the figure could be a frequency polygon (geom_freqpoly) or an area plot (geom_area) as well.</p>
+<p>After another round of guess and check it appears we are working with a area plot. See the test plot below for mapping and aesthetics.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>anothertest &lt;-<span class="st"> </span>moviedata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_area</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Fandango_Stars, <span class="dt">y =</span> ..prop..), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;orangered1&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;orangered1&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.25</span>, <span class="dt">size =</span> <span class="fl">0.75</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>anothertest </span></code></pre></div>
+<p><img src="Visualization_index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Apply the mapping and aesthetics to all of the variable to produce another master plot.</p>
+<p>And add the appropriate title and labels.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>stars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;*&quot;</span>, <span class="st">&quot;**&quot;</span>, <span class="st">&quot;***&quot;</span>, <span class="st">&quot;****&quot;</span>, <span class="st">&quot;*****&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a>mastergeom_area &lt;-<span class="st"> </span>moviedata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="st">  </span><span class="kw">geom_area</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Metacritic_norm_round, <span class="dt">y =</span> ..prop..), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="st">  </span><span class="kw">geom_area</span>(<span class="kw">aes</span>(<span class="dt">x =</span> RT_norm_round, <span class="dt">y =</span> ..prop..), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey20&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="st">  </span><span class="kw">geom_area</span>(<span class="kw">aes</span>(<span class="dt">x =</span> IMDB_norm_round, <span class="dt">y =</span> ..prop..), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;gold2&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="st">  </span><span class="kw">geom_area</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Metacritic_user_norm_round, <span class="dt">y =</span> ..prop..), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;chartreuse4&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="st">  </span><span class="kw">geom_area</span>(<span class="kw">aes</span>(<span class="dt">x =</span> RT_user_norm_round, <span class="dt">y =</span> ..prop..), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;cyan3&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="st">  </span><span class="kw">geom_area</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Fandango_Stars, <span class="dt">y =</span> ..prop..), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;orangered1&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;orangered1&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.25</span>, <span class="dt">size =</span> <span class="fl">0.75</span>)</span>
+<span id="cb9-10"><a href="#cb9-10"></a></span>
+<span id="cb9-11"><a href="#cb9-11"></a>finaldraft &lt;-<span class="st"> </span>mastergeom_area <span class="op">+</span><span class="st"> </span><span class="kw">scale_y_continuous</span>(<span class="dt">name =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">percent_format</span>()) <span class="op">+</span><span class="st"> </span><span class="kw">scale_x_discrete</span>(<span class="dt">limits =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">labels =</span> stars) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Fandango LOVES Movies&quot;</span>, <span class="dt">subtitle =</span> <span class="st">&quot;Normalized ratings distribution of 146 films in theaters in 2015 that had</span><span class="ch">\n</span><span class="st">30+ reviews on Fandango.com&quot;</span>)</span>
+<span id="cb9-12"><a href="#cb9-12"></a></span>
+<span id="cb9-13"><a href="#cb9-13"></a>finaldraft</span></code></pre></div>
+<p><img src="Visualization_index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The resulting plot looks much closer to the published figure. In terms of the axes, data, and scaling. Noteably, the resulting figure has produced “blunt ends” on the data (most noticeable in the orange Fandango data), I am still unsure how to fix this issue.</p>
+<p>The final step is to add the appropriate labels to the area plot. The way the labels are distrubuted it is probably easier to use annotate instead of geom_text.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>finaltestplot &lt;-<span class="st"> </span>moviedata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_area</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Fandango_Stars, <span class="dt">y =</span> ..prop..), <span class="dt">stat =</span> <span class="st">&quot;count&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;orangered1&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;orangered1&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.25</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_y_continuous</span>(<span class="dt">name =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">labels =</span> scales<span class="op">::</span><span class="kw">percent_format</span>()) <span class="op">+</span><span class="st"> </span><span class="kw">scale_x_discrete</span>(<span class="dt">limits =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">labels =</span> stars)</span>
+<span id="cb10-2"><a href="#cb10-2"></a></span>
+<span id="cb10-3"><a href="#cb10-3"></a>finaltestplot <span class="op">+</span><span class="st"> </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="dv">5</span>, <span class="dt">y =</span> <span class="fl">0.36</span>, <span class="dt">label =</span> <span class="st">&quot;Fandango&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;orangered1&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>)</span></code></pre></div>
+<p><img src="Visualization_index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Apply labels to make the final plot.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>finalplot &lt;-<span class="st"> </span>finaldraft <span class="op">+</span><span class="st"> </span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="fl">4.9</span>, <span class="dt">y =</span> <span class="fl">0.36</span>, <span class="dt">label =</span> <span class="st">&quot;Fandango&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;orangered1&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="st">  </span><span class="kw">annotate</span>( <span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="dv">3</span>, <span class="dt">y =</span> <span class="fl">0.37</span>, <span class="dt">label =</span> <span class="st">&quot;IMDb users&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;gold2&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="fl">2.7</span>, <span class="dt">y =</span> <span class="fl">0.30</span>, <span class="dt">label =</span> <span class="st">&quot;Metacritic&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;chartreuse4&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>) <span class="op">+</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="fl">2.7</span>, <span class="dt">y =</span> <span class="fl">0.27</span>, <span class="dt">label =</span> <span class="st">&quot;users&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;chartreuse4&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>) <span class="op">+</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="st">  </span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="fl">2.3</span>, <span class="dt">y =</span> <span class="fl">0.22</span>, <span class="dt">label =</span> <span class="st">&quot;Rotten&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;cyan3&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>) <span class="op">+</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="st">  </span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="fl">2.3</span>, <span class="dt">y =</span> <span class="fl">0.20</span>, <span class="dt">label =</span> <span class="st">&quot;Tomatoes&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;cyan3&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>) <span class="op">+</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="fl">2.3</span>, <span class="dt">y =</span> <span class="fl">0.18</span>, <span class="dt">label =</span> <span class="st">&quot;users&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;cyan3&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>) <span class="op">+</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="st">  </span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="fl">1.5</span>, <span class="dt">y =</span> <span class="fl">0.15</span>, <span class="dt">label =</span> <span class="st">&quot;Metacritic&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;purple&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="fl">0.6</span>, <span class="dt">y =</span> <span class="fl">0.12</span>, <span class="dt">label =</span> <span class="st">&quot;Tomatoes&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="fl">0.6</span>, <span class="dt">y =</span> <span class="fl">0.14</span>, <span class="dt">label =</span> <span class="st">&quot;Rotten&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;grey60&quot;</span>, <span class="dt">size =</span> <span class="fl">3.5</span>)</span>
+<span id="cb11-15"><a href="#cb11-15"></a></span>
+<span id="cb11-16"><a href="#cb11-16"></a>finalplot <span class="op">+</span><span class="st"> </span><span class="kw">theme_fivethirtyeight</span>()</span></code></pre></div>
+<p><img src="Visualization_index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>In summation, the new graphic is reasonably similar to the original published figure in basic structure and mapping. Some small aesthetic details and finishing formatting are missing.</p>
+<p>I was unsuccessful at recreating the three following components of the original figure.</p>
+<ol style="list-style-type: decimal">
+<li>The star images on the x-axis scale. My efforts to replace the axis collapsed the entire structure of the axis and rendered the plot unreadable.</li>
+<li>The blunt ends on each of the individual area plots. In the original figure the ends extend linearly to the base of the x-axis (similar to their appearance in my efforts with geom_density), however I was unable to indentify a method to fix this issue.</li>
+<li>The small label line associated with the “Metacritic users” area plot. I was unable to add this without adding a line that extended across the entire figure.</li>
+</ol>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
