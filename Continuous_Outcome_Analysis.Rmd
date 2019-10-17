@@ -464,69 +464,38 @@ Now let's perform fitting with multiple predictors. Use the same setup as the co
 
 
 ```{r}
-set.seed(1111) #makes each code block reproducible-lm
+set.seed(1111) #lm fit
 
-#write code that uses the train function in caret to fit the outcome to all predictors using the 3 methods specified.
-
-
-fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
-
-
+fitControl <- trainControl(method="repeatedcv",number=5,repeats=5)
 
 fit1 <- train(fracinf~ ., data = data_train, method = "lm", trControl = fitControl) 
 
-fit2 <- train(fracinf~ ., data = data_train, method = "earth", trControl = fitControl) 
-
-fit3 <- train(fracinf~ ., data = data_train, method = "knn", trControl = fitControl) 
-
-
 print(fit1)
-print(fit2)
-print(fit3)
-
-
 
 #report the RMSE for each method. Note that knn and earth perform some model tuning (we'll discuss this soon) and report multiple RMSE. Use the lowest value.
 ```
 
-
-
 ```{r}
-set.seed(1111) #makes each code block reproducible-lm
-
-#write code that uses the train function in caret to fit the outcome to all predictors using the 3 methods specified.
+set.seed(1111) #earth fit 
 
 
-fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
-
-
+fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) 
 
 fit2 <- train(fracinf~ ., data = data_train, method = "earth", trControl = fitControl) 
 
-
-
 print(fit2)
-
-
 
 ```
 
 
 ```{r}
-set.seed(1111) #makes each code block reproducible-lm
+set.seed(1111) 
 
-#write code that uses the train function in caret to fit the outcome to all predictors using the 3 methods specified.
+fitControl <- trainControl(method="repeatedcv",number=5,repeats=5)
 
+fit3 <- train(fracinf~ ., data = data_train, method = "knn", trControl = fitControl) 
 
-fitControl <- trainControl(method="repeatedcv",number=5,repeats=5) #setting CV method for caret
-
-
-
-fit2 <- train(fracinf~ ., data = data_train, method = "knn", trControl = fitControl) 
-
-
-
-print(fit2)
+print(fit3)
 
 ```
 
@@ -569,10 +538,43 @@ Next, we noticed during our exploratory analysis that it might be useful to cent
 
 ```{r processed-fit}
 
+set.seed(1111) #Preprocessed lm fit
+
+fitControl <- trainControl(method="repeatedcv",number=5,repeats=5)
+
+pfit1 <- train(fracinf~ ., data = train_drop_near_zero, method = "lm", preProc = c("center", "scale"), trControl = fitControl) 
+
+print(pfit1)
+
 
 #write code that repeats the multi-predictor fits from above, but this time applies centering and scaling of variables.
 #look at the RMSE for the new fits
+
+#Lots of variables with zero variance 
 ```
+
+```{r}
+set.seed(1111) #Preprocessed earth fit
+
+fitControl <- trainControl(method="repeatedcv",number=5,repeats=5)
+
+pfit2 <- train(fracinf~ ., data = train_drop_near_zero, method = "earth", preProc = c("center", "scale"), trControl = fitControl) 
+
+print(pfit2)
+```
+
+```{r}
+
+set.seed(1111) #Preprocessed knn fit
+
+fitControl <- trainControl(method="repeatedcv",number=5,repeats=5)
+
+pfit3 <- train(fracinf~ ., data = train_drop_near_zero, method = "knn", preProc = c("center", "scale"), trControl = fitControl) 
+
+print(pfit3)
+
+```
+
 
 So it looks like the linear mode got a bit better, KNN actually got worse, and MARS didn't change much. Since for KNN, "the data is the model", removing some predictors might have had a detrimental impact. Though to say something more useful, I would want to look much closer into what's going on and if these pre-processing steps are useful or not. For this exercise, let's move on.
 
@@ -582,7 +584,9 @@ We can look at the uncertainty in model performance, e.g., the RMSE. Let's look 
 
 ```{r uncertainty}
 
-resamples(fit1, fit2, fit3)
+resamples_nonprocessed <- resamples(list(fit1, fit2, fit3))
+
+resamples_nonprocessed %>% ggplot()
 
 #Use the `resamples` function in caret to extract uncertainty from the 3 models fit to the data  that doesn't have predictor pre-processing, then plot it
 ```
@@ -596,7 +600,20 @@ For this exercise, let's just pick one model. We'll go with the best performing 
 
 ```{r}
 #Write code to get model predictions for the outcome on the training data, and plot it as function of actual outcome values.
+
+data_train$knn_predict <- predict(fit3)
+
+ggplot(data_train, aes(x = data_train$knn_predict, y = data_train$fracinf)) + geom_point() +xlab("Predicted") + ylab("Actual")
+#Not bad!
+
 #also compute residuals (the difference between prediction and actual outcome) and plot that
+
+data_train$knn_residuals <- residuals(fit3)
+
+ggplot(data_train, aes(x = data_train$knn_predict, y = data_train$knn_residuals)) + geom_point() + xlab("Predicted") + ylab("Residuals")
+
+
+
 ```
 
 Both plots look ok, predicted vs. outcome is along the 45-degree line, and the residual plot shows no major pattern. Of course, for a real analysis, we would again want to dig a bit deeper. But we'll leave it at this for now. 
@@ -607,6 +624,17 @@ Both plots look ok, predicted vs. outcome is along the 45-degree line, and the r
 Let's do a final check, evaluate the performance of our final model on the test set.
 
 ```{r}
+
+data_test$knn_predict <- predict(fit3, data_test)
+ggplot(data_test, aes(x = data_test$knn_predict, y = data_test$fracinf)) + geom_point() +xlab("Predicted") + ylab("Actual")
+
+test_residuals <- residuals(fit3, data_test)
+
+RMSE(data_test$fracinf, data_test$knn_predict) #RMSE = 11.35577
+
+sum(test_residuals^2) #SSR = 24883.19
+
+
 #Write code that computes model predictions and for test data, then compute SSR and RMSE.
 ```
 
