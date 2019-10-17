@@ -525,7 +525,9 @@ You'll see that several variables are flagged as having near-zero variance. Look
 
 ```{r}
 
-train_drop_near_zero <- dplyr::select(data_train, -Deaths, -Hemisphere, -Hospitalizations, -MeanD1, -MeanI1, -MedianI1)
+near_zero <- nearZeroVar(data_train)
+train_drop_near_zero <- data_train[, -near_zero]
+dim(train_drop_near_zero)
 
 #write code that removes all variables with near zero variance from the data 
 ```

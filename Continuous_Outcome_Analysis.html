@@ -2063,16 +2063,18 @@ div.tocify {
 ## Setting            4.025974     0.5167959   FALSE FALSE</code></pre>
 <div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1"></a><span class="co">#write code using the caret function `nearZeroVar` to look at potential uninformative predictors. Set saveMetrics to TRUE. Look at the results </span></span></code></pre></div>
 <p>You’ll see that several variables are flagged as having near-zero variance. Look for instance at <code>Deaths</code>, you’ll see that almost all outbreaks have zero deaths. It is a judgment call if we should remove all those flagged as near-zero-variance or not. For this exercise, we will.</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a>train_drop_near_zero &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(data_train, <span class="op">-</span>Deaths, <span class="op">-</span>Hemisphere, <span class="op">-</span>Hospitalizations, <span class="op">-</span>MeanD1, <span class="op">-</span>MeanI1, <span class="op">-</span>MedianI1)</span>
-<span id="cb113-2"><a href="#cb113-2"></a></span>
-<span id="cb113-3"><a href="#cb113-3"></a><span class="co">#write code that removes all variables with near zero variance from the data </span></span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a>near_zero &lt;-<span class="st"> </span><span class="kw">nearZeroVar</span>(data_train)</span>
+<span id="cb113-2"><a href="#cb113-2"></a>train_drop_near_zero &lt;-<span class="st"> </span>data_train[, <span class="op">-</span>near_zero]</span>
+<span id="cb113-3"><a href="#cb113-3"></a><span class="kw">dim</span>(train_drop_near_zero)</span></code></pre></div>
+<pre><code>## [1] 387  13</code></pre>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a><span class="co">#write code that removes all variables with near zero variance from the data </span></span></code></pre></div>
 <p>You should be left with 13 variables (including the outcome).</p>
 <p>Next, we noticed during our exploratory analysis that it might be useful to center and scale predictors. So let’s do that now. With caret, one can do that by providing the <code>preProc</code> setting inside the <code>train</code> function. Set it to center and scale the data, then run the 3 models from above again.</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1"></a><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#Preprocessed lm fit</span></span>
-<span id="cb114-2"><a href="#cb114-2"></a></span>
-<span id="cb114-3"><a href="#cb114-3"></a>fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>)</span>
-<span id="cb114-4"><a href="#cb114-4"></a></span>
-<span id="cb114-5"><a href="#cb114-5"></a>pfit1 &lt;-<span class="st"> </span><span class="kw">train</span>(fracinf<span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_drop_near_zero, <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">preProc =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>), <span class="dt">trControl =</span> fitControl) </span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1"></a><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#Preprocessed lm fit</span></span>
+<span id="cb116-2"><a href="#cb116-2"></a></span>
+<span id="cb116-3"><a href="#cb116-3"></a>fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>)</span>
+<span id="cb116-4"><a href="#cb116-4"></a></span>
+<span id="cb116-5"><a href="#cb116-5"></a>pfit1 &lt;-<span class="st"> </span><span class="kw">train</span>(fracinf<span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_drop_near_zero, <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">preProc =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>), <span class="dt">trControl =</span> fitControl) </span></code></pre></div>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut = 19, uniqueCut
 ## = 10, : These variables have zero variances: CountryAustria, CountryBrazil,
 ## CountryCa da, CountryChi , CountryCroatia, CountryDenmark, CountryFrance,
@@ -4745,7 +4747,7 @@ div.tocify {
 ## hospital, Setting_2Village, Setting_2waterpark, Setting_2Wedding reception,
 ## Setting_2Wedding Reception, Setting_2Within a university setting, the
 ## freshmen dining hall was implicated</code></pre>
-<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1"></a><span class="kw">print</span>(pfit1)</span></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1"></a><span class="kw">print</span>(pfit1)</span></code></pre></div>
 <pre><code>## Linear Regression 
 ## 
 ## 387 samples
@@ -4760,15 +4762,15 @@ div.tocify {
 ##   28.20436  0.1951484  22.07522
 ## 
 ## Tuning parameter &#39;intercept&#39; was held constant at a value of TRUE</code></pre>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1"></a><span class="co">#write code that repeats the multi-predictor fits from above, but this time applies centering and scaling of variables.</span></span>
-<span id="cb168-2"><a href="#cb168-2"></a><span class="co">#look at the RMSE for the new fits</span></span>
-<span id="cb168-3"><a href="#cb168-3"></a></span>
-<span id="cb168-4"><a href="#cb168-4"></a><span class="co">#Lots of variables with zero variance </span></span></code></pre></div>
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1"></a><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#Preprocessed earth fit</span></span>
-<span id="cb169-2"><a href="#cb169-2"></a></span>
-<span id="cb169-3"><a href="#cb169-3"></a>fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>)</span>
-<span id="cb169-4"><a href="#cb169-4"></a></span>
-<span id="cb169-5"><a href="#cb169-5"></a>pfit2 &lt;-<span class="st"> </span><span class="kw">train</span>(fracinf<span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_drop_near_zero, <span class="dt">method =</span> <span class="st">&quot;earth&quot;</span>, <span class="dt">preProc =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>), <span class="dt">trControl =</span> fitControl) </span></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1"></a><span class="co">#write code that repeats the multi-predictor fits from above, but this time applies centering and scaling of variables.</span></span>
+<span id="cb170-2"><a href="#cb170-2"></a><span class="co">#look at the RMSE for the new fits</span></span>
+<span id="cb170-3"><a href="#cb170-3"></a></span>
+<span id="cb170-4"><a href="#cb170-4"></a><span class="co">#Lots of variables with zero variance </span></span></code></pre></div>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1"></a><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#Preprocessed earth fit</span></span>
+<span id="cb171-2"><a href="#cb171-2"></a></span>
+<span id="cb171-3"><a href="#cb171-3"></a>fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>)</span>
+<span id="cb171-4"><a href="#cb171-4"></a></span>
+<span id="cb171-5"><a href="#cb171-5"></a>pfit2 &lt;-<span class="st"> </span><span class="kw">train</span>(fracinf<span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_drop_near_zero, <span class="dt">method =</span> <span class="st">&quot;earth&quot;</span>, <span class="dt">preProc =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>), <span class="dt">trControl =</span> fitControl) </span></code></pre></div>
 <pre><code>## Warning in preProcess.default(method = c(&quot;center&quot;, &quot;scale&quot;), x =
 ## structure(c(1, : These variables have zero variances: CountryAustria,
 ## CountryBrazil, CountryCa da, CountryChi , CountryCroatia,
@@ -7484,7 +7486,7 @@ div.tocify {
 ## hospital, Setting_2Village, Setting_2waterpark, Setting_2Wedding reception,
 ## Setting_2Wedding Reception, Setting_2Within a university setting, the
 ## freshmen dining hall was implicated</code></pre>
-<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="#cb199-1"></a><span class="kw">print</span>(pfit2)</span></code></pre></div>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="#cb201-1"></a><span class="kw">print</span>(pfit2)</span></code></pre></div>
 <pre><code>## Multivariate Adaptive Regression Spline 
 ## 
 ## 387 samples
@@ -7503,11 +7505,11 @@ div.tocify {
 ## Tuning parameter &#39;degree&#39; was held constant at a value of 1
 ## RMSE was used to select the optimal model using the smallest value.
 ## The final values used for the model were nprune = 16 and degree = 1.</code></pre>
-<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="#cb201-1"></a><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#Preprocessed knn fit</span></span>
-<span id="cb201-2"><a href="#cb201-2"></a></span>
-<span id="cb201-3"><a href="#cb201-3"></a>fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>)</span>
-<span id="cb201-4"><a href="#cb201-4"></a></span>
-<span id="cb201-5"><a href="#cb201-5"></a>pfit3 &lt;-<span class="st"> </span><span class="kw">train</span>(fracinf<span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_drop_near_zero, <span class="dt">method =</span> <span class="st">&quot;knn&quot;</span>, <span class="dt">preProc =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>), <span class="dt">trControl =</span> fitControl) </span></code></pre></div>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="#cb203-1"></a><span class="kw">set.seed</span>(<span class="dv">1111</span>) <span class="co">#Preprocessed knn fit</span></span>
+<span id="cb203-2"><a href="#cb203-2"></a></span>
+<span id="cb203-3"><a href="#cb203-3"></a>fitControl &lt;-<span class="st"> </span><span class="kw">trainControl</span>(<span class="dt">method=</span><span class="st">&quot;repeatedcv&quot;</span>,<span class="dt">number=</span><span class="dv">5</span>,<span class="dt">repeats=</span><span class="dv">5</span>)</span>
+<span id="cb203-4"><a href="#cb203-4"></a></span>
+<span id="cb203-5"><a href="#cb203-5"></a>pfit3 &lt;-<span class="st"> </span><span class="kw">train</span>(fracinf<span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_drop_near_zero, <span class="dt">method =</span> <span class="st">&quot;knn&quot;</span>, <span class="dt">preProc =</span> <span class="kw">c</span>(<span class="st">&quot;center&quot;</span>, <span class="st">&quot;scale&quot;</span>), <span class="dt">trControl =</span> fitControl) </span></code></pre></div>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut = 19, uniqueCut
 ## = 10, : These variables have zero variances: CountryAustria, CountryBrazil,
 ## CountryCa da, CountryChi , CountryCroatia, CountryDenmark, CountryFrance,
@@ -15248,7 +15250,7 @@ div.tocify {
 ## hospital, Setting_2Village, Setting_2waterpark, Setting_2Wedding reception,
 ## Setting_2Wedding Reception, Setting_2Within a university setting, the
 ## freshmen dining hall was implicated</code></pre>
-<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="#cb228-1"></a><span class="kw">print</span>(pfit3)</span></code></pre></div>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="#cb230-1"></a><span class="kw">print</span>(pfit3)</span></code></pre></div>
 <pre><code>## k-Nearest Neighbors 
 ## 
 ## 387 samples
@@ -15271,45 +15273,45 @@ div.tocify {
 <div id="model-uncertainty" class="section level2">
 <h2>Model uncertainty</h2>
 <p>We can look at the uncertainty in model performance, e.g., the RMSE. Let’s look at it for the models fit to the un-processed data.</p>
-<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="#cb230-1"></a>resamples_nonprocessed &lt;-<span class="st"> </span><span class="kw">resamples</span>(<span class="kw">list</span>(fit1, fit2, fit3))</span>
-<span id="cb230-2"><a href="#cb230-2"></a></span>
-<span id="cb230-3"><a href="#cb230-3"></a>resamples_nonprocessed <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="#cb232-1"></a>resamples_nonprocessed &lt;-<span class="st"> </span><span class="kw">resamples</span>(<span class="kw">list</span>(fit1, fit2, fit3))</span>
+<span id="cb232-2"><a href="#cb232-2"></a></span>
+<span id="cb232-3"><a href="#cb232-3"></a>resamples_nonprocessed <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>()</span></code></pre></div>
 <p><img src="Continuous_Outcome_Analysis_files/figure-html/uncertainty-1.png" width="672" /></p>
-<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="#cb231-1"></a><span class="co">#Use the `resamples` function in caret to extract uncertainty from the 3 models fit to the data  that doesn&#39;t have predictor pre-processing, then plot it</span></span></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="#cb233-1"></a><span class="co">#Use the `resamples` function in caret to extract uncertainty from the 3 models fit to the data  that doesn&#39;t have predictor pre-processing, then plot it</span></span></code></pre></div>
 <p>It seems that the model uncertainty for the outcome is fairly narrow for all models. We can (and in a real setting should) do further explorations to decide which model to choose. This is based part on what the model results are, and part on what we want. If we want a very simple, interpretable model, we’d likely use the linear model. If we want a model that has better performance, we might use MARS or - with the un-processed dataset - KNN.</p>
 </div>
 <div id="residual-plots" class="section level2">
 <h2>Residual plots</h2>
 <p>For this exercise, let’s just pick one model. We’ll go with the best performing one, namely KNN (fit to non-pre-processed data). Let’s take a look at the residual plot.</p>
-<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="#cb232-1"></a><span class="co">#Write code to get model predictions for the outcome on the training data, and plot it as function of actual outcome values.</span></span>
-<span id="cb232-2"><a href="#cb232-2"></a></span>
-<span id="cb232-3"><a href="#cb232-3"></a>data_train<span class="op">$</span>knn_predict &lt;-<span class="st"> </span><span class="kw">predict</span>(fit3)</span>
-<span id="cb232-4"><a href="#cb232-4"></a></span>
-<span id="cb232-5"><a href="#cb232-5"></a><span class="kw">ggplot</span>(data_train, <span class="kw">aes</span>(<span class="dt">x =</span> data_train<span class="op">$</span>knn_predict, <span class="dt">y =</span> data_train<span class="op">$</span>fracinf)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="kw">xlab</span>(<span class="st">&quot;Predicted&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Actual&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="#cb234-1"></a><span class="co">#Write code to get model predictions for the outcome on the training data, and plot it as function of actual outcome values.</span></span>
+<span id="cb234-2"><a href="#cb234-2"></a></span>
+<span id="cb234-3"><a href="#cb234-3"></a>data_train<span class="op">$</span>knn_predict &lt;-<span class="st"> </span><span class="kw">predict</span>(fit3)</span>
+<span id="cb234-4"><a href="#cb234-4"></a></span>
+<span id="cb234-5"><a href="#cb234-5"></a><span class="kw">ggplot</span>(data_train, <span class="kw">aes</span>(<span class="dt">x =</span> data_train<span class="op">$</span>knn_predict, <span class="dt">y =</span> data_train<span class="op">$</span>fracinf)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="kw">xlab</span>(<span class="st">&quot;Predicted&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Actual&quot;</span>)</span></code></pre></div>
 <p><img src="Continuous_Outcome_Analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="#cb233-1"></a><span class="co">#Not bad!</span></span>
-<span id="cb233-2"><a href="#cb233-2"></a></span>
-<span id="cb233-3"><a href="#cb233-3"></a><span class="co">#also compute residuals (the difference between prediction and actual outcome) and plot that</span></span>
-<span id="cb233-4"><a href="#cb233-4"></a></span>
-<span id="cb233-5"><a href="#cb233-5"></a>data_train<span class="op">$</span>knn_residuals &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit3)</span>
-<span id="cb233-6"><a href="#cb233-6"></a></span>
-<span id="cb233-7"><a href="#cb233-7"></a><span class="kw">ggplot</span>(data_train, <span class="kw">aes</span>(<span class="dt">x =</span> data_train<span class="op">$</span>knn_predict, <span class="dt">y =</span> data_train<span class="op">$</span>knn_residuals)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;Predicted&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Residuals&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="#cb235-1"></a><span class="co">#Not bad!</span></span>
+<span id="cb235-2"><a href="#cb235-2"></a></span>
+<span id="cb235-3"><a href="#cb235-3"></a><span class="co">#also compute residuals (the difference between prediction and actual outcome) and plot that</span></span>
+<span id="cb235-4"><a href="#cb235-4"></a></span>
+<span id="cb235-5"><a href="#cb235-5"></a>data_train<span class="op">$</span>knn_residuals &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit3)</span>
+<span id="cb235-6"><a href="#cb235-6"></a></span>
+<span id="cb235-7"><a href="#cb235-7"></a><span class="kw">ggplot</span>(data_train, <span class="kw">aes</span>(<span class="dt">x =</span> data_train<span class="op">$</span>knn_predict, <span class="dt">y =</span> data_train<span class="op">$</span>knn_residuals)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;Predicted&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Residuals&quot;</span>)</span></code></pre></div>
 <p><img src="Continuous_Outcome_Analysis_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
 <p>Both plots look ok, predicted vs. outcome is along the 45-degree line, and the residual plot shows no major pattern. Of course, for a real analysis, we would again want to dig a bit deeper. But we’ll leave it at this for now.</p>
 </div>
 <div id="final-model-evaluation" class="section level2">
 <h2>Final model evaluation</h2>
 <p>Let’s do a final check, evaluate the performance of our final model on the test set.</p>
-<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="#cb234-1"></a>data_test<span class="op">$</span>knn_predict &lt;-<span class="st"> </span><span class="kw">predict</span>(fit3, data_test)</span>
-<span id="cb234-2"><a href="#cb234-2"></a><span class="kw">ggplot</span>(data_test, <span class="kw">aes</span>(<span class="dt">x =</span> data_test<span class="op">$</span>knn_predict, <span class="dt">y =</span> data_test<span class="op">$</span>fracinf)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="kw">xlab</span>(<span class="st">&quot;Predicted&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Actual&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="#cb236-1"></a>data_test<span class="op">$</span>knn_predict &lt;-<span class="st"> </span><span class="kw">predict</span>(fit3, data_test)</span>
+<span id="cb236-2"><a href="#cb236-2"></a><span class="kw">ggplot</span>(data_test, <span class="kw">aes</span>(<span class="dt">x =</span> data_test<span class="op">$</span>knn_predict, <span class="dt">y =</span> data_test<span class="op">$</span>fracinf)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="kw">xlab</span>(<span class="st">&quot;Predicted&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Actual&quot;</span>)</span></code></pre></div>
 <p><img src="Continuous_Outcome_Analysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="#cb235-1"></a>test_residuals &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit3, data_test)</span>
-<span id="cb235-2"><a href="#cb235-2"></a></span>
-<span id="cb235-3"><a href="#cb235-3"></a><span class="kw">RMSE</span>(data_test<span class="op">$</span>fracinf, data_test<span class="op">$</span>knn_predict) <span class="co">#RMSE = 11.35577</span></span></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="#cb237-1"></a>test_residuals &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit3, data_test)</span>
+<span id="cb237-2"><a href="#cb237-2"></a></span>
+<span id="cb237-3"><a href="#cb237-3"></a><span class="kw">RMSE</span>(data_test<span class="op">$</span>fracinf, data_test<span class="op">$</span>knn_predict) <span class="co">#RMSE = 11.35577</span></span></code></pre></div>
 <pre><code>## [1] 11.35577</code></pre>
-<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="#cb237-1"></a><span class="kw">sum</span>(test_residuals<span class="op">^</span><span class="dv">2</span>) <span class="co">#SSR = 24883.19</span></span></code></pre></div>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="#cb239-1"></a><span class="kw">sum</span>(test_residuals<span class="op">^</span><span class="dv">2</span>) <span class="co">#SSR = 24883.19</span></span></code></pre></div>
 <pre><code>## [1] 24883.19</code></pre>
-<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="#cb239-1"></a><span class="co">#Write code that computes model predictions and for test data, then compute SSR and RMSE.</span></span></code></pre></div>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="#cb241-1"></a><span class="co">#Write code that computes model predictions and for test data, then compute SSR and RMSE.</span></span></code></pre></div>
 <p>Since we have a different number of observations, the result isn’t expected to be quite the same as for the training data (despite dividing by sample size to account for that). But it’s fairly close, and surprisingly not actually worse. So the KNN model seems to be reasonable at predicting. Now if its performance is ‘good enough’ is a scientific question.</p>
 <p>We will leave it at this, for now, we will likely (re)visit some other topics soon as we perform more such analysis exercises in upcoming weeks. But you are welcome to keep exploring this dataset and try some of the other bits and pieces we covered.</p>
 </div>
