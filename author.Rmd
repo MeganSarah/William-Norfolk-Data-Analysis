@@ -1,9 +1,12 @@
 ---
-title: "About the author"
+title: "About the Author"
+author: "William Norfolk"
 output: 
   html_document:
     toc: FALSE
 ---
 
-If you want to learn more about me, you can visit [this website](LINK-TO-INTRODUCTION-PAGE).
+William Norfolk is a 1st year Envrionmental Health Science PhD student at the University of Georgia working in the Lipp laboratory.
+
+If you want to learn more about me, you can visit [this website](https://epid8060fall2019.github.io/WilliamNorfolk-Introduction/).
 
