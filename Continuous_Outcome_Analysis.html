@@ -12,7 +12,7 @@
 
 <meta name="author" content="William Norfolk" />
 
-<meta name="date" content="2019-10-17" />
+<meta name="date" content="2019-10-18" />
 
 <title>Continuous Outcome Analysis-William Norfolk</title>
 
@@ -480,7 +480,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Continuous Outcome Analysis-William Norfolk</h1>
 <h4 class="author">William Norfolk</h4>
-<h4 class="date">2019-10-17</h4>
+<h4 class="date">2019-10-18</h4>
 
 </div>
 
@@ -717,8 +717,8 @@ div.tocify {
 <pre><code>## Warning: Removed 120 rows containing missing values (geom_point).</code></pre>
 <p><img src="Continuous_Outcome_Analysis_files/figure-html/checkoutcome-4.png" width="672" /></p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># Plot one variable on the x axis, the other on the y axis</span></span>
-<span id="cb41-2"><a href="#cb41-2"></a><span class="co"># also plot the difference of the 2 variables-What Kind of plot? Point or Density?</span></span>
-<span id="cb41-3"><a href="#cb41-3"></a><span class="co"># make sure you adjust so both are in the same units#######NOT SURE WHAT THIS MEANS, RECHECK#########</span></span></code></pre></div>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="co"># also plot the difference of the 2 variables</span></span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="co"># make sure you adjust so both are in the same units</span></span></code></pre></div>
 <p>Both ways of plotting the data show that for most outbreaks, the two ways of getting the outcome agree. So that’s good. But we need to look closer and resolve the problem with infinite values above. Check to see what the <code>RateAll</code> variable has for those infinite values.</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>infinity_subset &lt;-<span class="st"> </span><span class="kw">subset</span>(noro_add_new_var, fracinf <span class="op">==</span><span class="st"> &quot;Inf&quot;</span>)</span>
 <span id="cb42-2"><a href="#cb42-2"></a></span>
@@ -1552,7 +1552,7 @@ div.tocify {
 <div id="a-null-model" class="section level2">
 <h2>A null model</h2>
 <p>Now let’s begin with the model fitting. We’ll start by looking at a <em>null model</em>, which is just the mean of the data. This is, of course, a stupid “model” but provides some baseline for performance.</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a><span class="kw">mean</span>(data_train<span class="op">$</span>fracinf) <span class="co">#Seems a bit too easy, I think I might have misunderstood this one... Recheck later.</span></span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a><span class="kw">mean</span>(data_train<span class="op">$</span>fracinf) <span class="co">#Seems a bit too easy, I am unsure about this...</span></span></code></pre></div>
 <pre><code>## [1] 41.25884</code></pre>
 <div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a><span class="co">#write code that computes the RMSE for a null model, which is just the mean of the outcome</span></span>
 <span id="cb91-2"><a href="#cb91-2"></a><span class="co">#remember that from now on until the end, everything happens with the training data</span></span></code></pre></div>

@@ -115,8 +115,8 @@ noro_add_new_var %>% ggplot(aes(x = fracinf, y = RateAll)) + geom_point()
 noro_add_new_var %>% ggplot(aes(x = RateAll - fracinf, y = fracinf)) + geom_point()
 
 # Plot one variable on the x axis, the other on the y axis
-# also plot the difference of the 2 variables-What Kind of plot? Point or Density?
-# make sure you adjust so both are in the same units#######NOT SURE WHAT THIS MEANS, RECHECK#########
+# also plot the difference of the 2 variables
+# make sure you adjust so both are in the same units
 ```
 
 Both ways of plotting the data show that for most outbreaks, the two ways of getting the outcome agree. So that's good. But we need to look closer and resolve the problem with infinite values above. Check to see what the `RateAll` variable has for those infinite values.
@@ -417,7 +417,7 @@ Now let's begin with the model fitting. We'll start by looking at a _null model_
 
 ```{r clean-na}
 
-mean(data_train$fracinf) #Seems a bit too easy, I think I might have misunderstood this one... Recheck later.
+mean(data_train$fracinf) #Seems a bit too easy, I am unsure about this...
 
 #write code that computes the RMSE for a null model, which is just the mean of the outcome
 #remember that from now on until the end, everything happens with the training data
