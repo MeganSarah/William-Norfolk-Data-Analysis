@@ -22,6 +22,11 @@ Note that I call the main data variable `d`. So if you see bits of code with tha
 We need a variety of different packages, which are loaded here. Install as needed.
 If you use others, load them here.
 
+```{r error1, cache = F}
+knitr::opts_chunk$set(error = TRUE, warning=FALSE)
+```
+
+
 ```{r setup}
 library('tidyr')
 library('dplyr')
