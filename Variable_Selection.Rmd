@@ -173,6 +173,32 @@ Next, let's create a few plots showing the outcome and the predictors. For the c
 
 
 ```{r plots-1}
+
+library(gridExtra)
+
+gg_vs_casesall <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = CasesAll, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
+
+gg_vs_deaths <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Deaths, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
+
+gg_vs_hosp <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Hospitalizations, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
+
+gg_vs_meand1 <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = MeanD1, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
+
+gg_vs_meani1 <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = MeanI1, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
+
+gg_vs_mediand1 <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = MedianD1, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
+
+gg_vs_mediani1 <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = MedianI1, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
+
+gg_vs_obyear <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = OBYear, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
+
+gg_vs_riskall <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = RiskAll, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
+
+gg_vs_vomit <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Vomit, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
+
+grid.arrange(gg_vs_casesall, gg_vs_deaths, gg_vs_hosp, gg_vs_meand1, gg_vs_meani1, nrow = 2)
+
+grid.arrange(gg_vs_mediand1, gg_vs_mediani1, gg_vs_obyear, gg_vs_riskall, gg_vs_vomit, nrow = 2)
 #write code that produces plots showing our outcome of interest on the x-axis and each numeric predictor on the y-axis.
 #you can use the facet_wrap functionality in ggplot for it, or do it some other way.
 ```
@@ -182,6 +208,26 @@ Things look ok, apart from the skew in the predictors we discussed previously.
 Next, let's create plots for the categorical variabless. You can use for instance `geom_count` for it, or some other representation. If you prefer lots of tables, that's ok too.
 
 ```{r plots-2}
+
+gg_vs_action1 <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Action1)) + geom_count() 
+
+gg_vs_country <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Country)) + geom_count() 
+
+gg_vs_hemi <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Hemisphere)) + geom_count() 
+
+gg_vs_path1 <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Path1)) + geom_count() 
+
+gg_vs_season <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = season)) + geom_count() 
+
+gg_vs_tras1 <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Trans1)) + geom_count() 
+
+gg_vs_Setting <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Action1)) + geom_count() 
+
+grid.arrange(gg_vs_action1, gg_vs_country, gg_vs_hemi, gg_vs_path1, nrow = 2)
+grid.arrange(gg_vs_season, gg_vs_tras1, gg_vs_Setting, nrow = 2)
+
+
+
 #write code that produces plots or tables showing our outcome of interest and each categorical predictor.
 ```
 
