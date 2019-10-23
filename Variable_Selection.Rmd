@@ -574,7 +574,7 @@ sfeatga_res = selectFeatures(learner = mylearner,
                                    resampling = sampling_choice, 
                                    control = ctrl_GA, 
                                    show.info = FALSE,
-                                   measures = acc)
+                                   measures = auc)
 resmat[5,1] = "GA"
 resmat[5,2] = sfeatga_res$y
 resmat[5,3] = paste(as.vector(sfeatga_res$x), collapse= ', ')
@@ -686,7 +686,7 @@ sfeatga_res = selectFeatures(learner = mylearner,
                                    resampling = sampling_choice, 
                                    control = ctrl_GA, 
                                    show.info = FALSE,
-                                   measures = acc)
+                                   measures = auc)
 resmat[5,1] = "GA"
 resmat[5,2] = sfeatga_res$y
 resmat[5,3] = paste(as.vector(sfeatga_res$x), collapse= ', ')
@@ -714,7 +714,7 @@ plotROCCurves(lda_pred)
 #then use generateThreshVsPerfData() with both lda_pred and log_pred (computed above) to create a structure that contains best model curves for both logistic and LDA, then plot the curves.
 
 
-generateThreshVsPerfData()
+generateThreshVsPerfData(lda_mod, lda_pred)
 ```
 
 You should see from the plot that the LDA model performs very similar to the Logistic model.
