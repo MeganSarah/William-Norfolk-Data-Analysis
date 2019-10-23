@@ -489,6 +489,13 @@ You should find that the null model has an AUC of 0.5, as expected for a "no inf
 
 Now we run the single-predictor models again.
 
+```{r}
+poo <- glm(gg2c4 ~ Country, data = model_data, family = "binomial")
+
+AUC(poo)
+```
+
+
 ```{r, unifit-auc, warning=FALSE}
 
 set.seed(1111) #makes each code block reproducible
@@ -504,7 +511,7 @@ for (nn in 1:npred)
     unidata = data.frame(gg2c4 = outcome, model_data[,nn+1] )
     ## Generate the task, i.e. define outcome and predictors to be fit
     mytask = makeClassifTask(id='unianalysis', data = unidata, target = outcomename, positive = "Yes")
-    model = resample(mylearner, task = mytask, resampling = sampling_choice, show.info = FALSE, measures = AUC )
+    model = resample(mylearner, task = mytask, resampling = sampling_choice, show.info = FALSE, measures = auc )
     unifmat[nn,1] = names(predictors)[nn] 
     unifmat[nn,2] = model$aggr
 }
@@ -518,7 +525,15 @@ Looks like there are a few single-predictor models with better performance than 
 
 Now let's again fit a full model with all predictors. 
 
+
+
 ```{r fullfit-auc}
+set.seed(1111) #makes each code block reproducible
+#do full model with Cross-Validation - to get an idea for the amount of over-fitting a full model does
+mytask = makeClassifTask(id='fullanalysis', data = model_data, target = outcomename, positive = "Yes")
+fullmodel = resample(mylearner, task = mytask, resampling = sampling_choice, show.info = FALSE, measures = auc )
+ACC_fullmodel = fullmodel$aggr[1]
+print(ACC_fullmodel)
 #copy and paste the code from above for the full model fit, but now switch to AUC instead of accuracy.
 ```
 
@@ -527,6 +542,45 @@ This is better than any single-predictor models. Let's see if a sub-model can do
 
 
 ```{r mlr-subset-auc}
+
+set.seed(1111) 
+tstart=proc.time(); #capture current CPU time for timing how long things take
+#do 2 forms of forward and backward selection, just to compare
+select_methods=c("sbs","sfbs","sfs","sffs") 
+resmat=data.frame(method = rep(0,4), AUC = rep(0,4), Model = rep(0,4))
+ct=1;
+for (select_method in select_methods) #loop over all stepwise selection methods
+{
+  ctrl = makeFeatSelControlSequential(method = select_method)
+  print(sprintf('doing subset selection with method %s ',select_method))
+  sfeat_res = selectFeatures(learner = mylearner, 
+                             task = mytask, 
+                             resampling = sampling_choice, 
+                             control = ctrl, 
+                             show.info = FALSE,
+                             measures = auc)
+  
+  resmat[ct,1] = select_methods[ct]
+  resmat[ct,2] = sfeat_res$y
+  resmat[ct,3] = paste(as.vector(sfeat_res$x), collapse= ', ')
+  ct=ct+1;
+}
+# do feature selection with genetic algorithm
+maxit = 100 #number of iterations - should be large for 'production run'
+ctrl_GA =makeFeatSelControlGA(maxit = maxit)
+print(sprintf('doing subset selection with genetic algorithm'))
+sfeatga_res = selectFeatures(learner = mylearner, 
+                                   task = mytask, 
+                                   resampling = sampling_choice, 
+                                   control = ctrl_GA, 
+                                   show.info = FALSE,
+                                   measures = acc)
+resmat[5,1] = "GA"
+resmat[5,2] = sfeatga_res$y
+resmat[5,3] = paste(as.vector(sfeatga_res$x), collapse= ', ')
+runtime.minutes_SS=(proc.time()-tstart)[[3]]/60; #total time in minutes the optimization took
+print(sprintf('subset selection took %f minutes',runtime.minutes_SS));
+kable(resmat)
 #copy and paste the code from above for the subset selection, but now switch to AUC instead of accuracy.
 ```
 
@@ -539,19 +593,19 @@ While this is a common measure and useful to evaluate how models perform at diff
 
 ```{r roc-plot}
 set.seed(1111) #makes each code block reproducible
-d2 <- d %>% dplyr::select(gg2c4, sfeatga_res$x )
-mytask = makeClassifTask(id='rocanalysis', data = d2, target = outcomename, positive = "Yes")
+roc_plot_data <- model_data %>% dplyr::select(gg2c4, sfeatga_res$x )
+mytask = makeClassifTask(id='rocanalysis', data = roc_plot_data, target = outcomename, positive = "Yes")
 log_mod = train(mylearner, mytask)
 log_pred = predict(log_mod, task = mytask)
-df = generateThreshVsPerfData(list(logistic = log_pred), measures = list(fpr, tpr))
-plotROCCurves(df)
+roc_plot_model = generateThreshVsPerfData(list(logistic = log_pred), measures = list(fpr, tpr))
+plotROCCurves(roc_plot_model)
 ```
 
 
 Based on this plot, a FP of around 0.5 an TP of around 0.75 seem to produce a good model. Digging into the `df` object, you can find the raw data underlying the curve in `df$data` and will find 
 
 ```{r roc-best}
-print(df$data[29:31,])
+print(roc_plot_model$data[29:31,])
 ```
 
 This means for this model, if we were to use it we might want to set a threshold of around 0.3, i.e. everything above that probability would be predicted as positive/yes.
@@ -564,15 +618,82 @@ Let's see if we can find another model that might perform even better. Let's loo
 Let's re-run the single model, followed by the full model and subset selection.
 
 ```{r, unifit-auc-lda, warning=FALSE}
+
+set.seed(1111) #makes each code block reproducible
+#set learner/model. this corresponds to a logistic model.
+#mlr calls different models different "learners"
+learner_name = "classif.lda";
+mylearner = makeLearner(learner_name, predict.type = "prob")
+# this will contain the results
+unifmat=data.frame(variable = rep(0,npred), AUC = rep(0,npred))
+# loop over each predictor, build simple dataset with just outcome and that predictor, fit it to a glm/logistic model
+for (nn in 1:npred)
+{
+    unidata = data.frame(gg2c4 = outcome, model_data[,nn+1] )
+    ## Generate the task, i.e. define outcome and predictors to be fit
+    mytask = makeClassifTask(id='unianalysis', data = unidata, target = outcomename, positive = "Yes")
+    model = resample(mylearner, task = mytask, resampling = sampling_choice, show.info = FALSE, measures = auc )
+    unifmat[nn,1] = names(predictors)[nn] 
+    unifmat[nn,2] = model$aggr
+}
+kable(unifmat)
+
 #copy and paste the code from above for single predictor fits. Switch the learner from a the logistic model to a LDA model. Check the mlr website to figure out the name for that learner. (see 'integrated learner' section)
 ```
 
 ```{r fullfit-auc-lda}
+
+set.seed(1111) #makes each code block reproducible
+#do full model with Cross-Validation - to get an idea for the amount of over-fitting a full model does
+mytask = makeClassifTask(id='fullanalysis', data = model_data, target = outcomename, positive = "Yes")
+fullmodel = resample(mylearner, task = mytask, resampling = sampling_choice, show.info = FALSE, measures = auc )
+ACC_fullmodel = fullmodel$aggr[1]
+print(ACC_fullmodel)
 #copy and paste the code from above for the full model fit, but now for LDA. Since you already switched the learner/model above, no further adjustment should be needed
 ```
 
 
 ```{r mlr-subset-auc-lda}
+
+set.seed(1111) 
+tstart=proc.time(); #capture current CPU time for timing how long things take
+#do 2 forms of forward and backward selection, just to compare
+select_methods=c("sbs","sfbs","sfs","sffs") 
+resmat=data.frame(method = rep(0,4), AUC = rep(0,4), Model = rep(0,4))
+ct=1;
+for (select_method in select_methods) #loop over all stepwise selection methods
+{
+  ctrl = makeFeatSelControlSequential(method = select_method)
+  print(sprintf('doing subset selection with method %s ',select_method))
+  sfeat_res = selectFeatures(learner = mylearner, 
+                             task = mytask, 
+                             resampling = sampling_choice, 
+                             control = ctrl, 
+                             show.info = FALSE,
+                             measures = auc)
+  
+  resmat[ct,1] = select_methods[ct]
+  resmat[ct,2] = sfeat_res$y
+  resmat[ct,3] = paste(as.vector(sfeat_res$x), collapse= ', ')
+  ct=ct+1;
+}
+# do feature selection with genetic algorithm
+maxit = 100 #number of iterations - should be large for 'production run'
+ctrl_GA =makeFeatSelControlGA(maxit = maxit)
+print(sprintf('doing subset selection with genetic algorithm'))
+sfeatga_res = selectFeatures(learner = mylearner, 
+                                   task = mytask, 
+                                   resampling = sampling_choice, 
+                                   control = ctrl_GA, 
+                                   show.info = FALSE,
+                                   measures = acc)
+resmat[5,1] = "GA"
+resmat[5,2] = sfeatga_res$y
+resmat[5,3] = paste(as.vector(sfeatga_res$x), collapse= ', ')
+runtime.minutes_SS=(proc.time()-tstart)[[3]]/60; #total time in minutes the optimization took
+print(sprintf('subset selection took %f minutes',runtime.minutes_SS));
+kable(resmat)
+
 #copy and paste the code from above for subset selection, now for LDA. Since you already switched the learner/model above, no further adjustment should be needed
 ```
 
@@ -581,8 +702,19 @@ It Looks like we again get some sub-models that are slightly better than the ful
 
 ```{r roc-plot-2}
 #copy the code from roc-plot above and re-do train/predict byt now save it as lda_mod and lda_pred
-#then use generateThreshVsPerfData() with both lda_pred and log_pred (computed above) to create a structure that contains
-#best model curves for both logistic and LDA, then plot the curves.
+set.seed(1111) #makes each code block reproducible
+lda_mod <- model_data %>% dplyr::select(gg2c4, sfeatga_res$x )
+mytask = makeClassifTask(id='rocanalysis', data = lda_mod, target = outcomename, positive = "Yes")
+log_mod = train(mylearner, mytask)
+log_pred = predict(log_mod, task = mytask)
+lda_pred = generateThreshVsPerfData(list(logistic = log_pred), measures = list(fpr, tpr))
+plotROCCurves(lda_pred)
+
+
+#then use generateThreshVsPerfData() with both lda_pred and log_pred (computed above) to create a structure that contains best model curves for both logistic and LDA, then plot the curves.
+
+
+generateThreshVsPerfData()
 ```
 
 You should see from the plot that the LDA model performs very similar to the Logistic model.
