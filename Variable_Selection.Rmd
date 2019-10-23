@@ -118,12 +118,24 @@ unique(clean_year$OBYear)
 #also convert any other variables as needed
 ```
 
+```{r}
+#Backtracking from the more-factor-cleaning chunk it seems like I have missed a variable conversion to factor somewhere. Looking at the codebook my thought is that Vomit should be a factor with two levels 1 = Yes Vomit 0 = No Vomit. I will recode this here to correct for the proper variable classes downstream.
+
+clean_year$Vomit <- as.factor(as.integer(clean_year$Vomit))
+
+fix_vomit <- clean_year %>% dplyr::mutate(Vomit = recode(Vomit, 
+                                                         "1" = "Yes Vomit",
+                                                         "0" = "No Vomit"))
+
+```
+
+
 Next, we remove the `Unspecified` entry in `Hemisphere` and recode `Action1` and `Path1` as described in the Data Analysis script, i.e. from `Unknown` to `Unspecified`. Also do the same grouping into just `Restaurant` and `Other` with the `Setting_1` variable. Again, remember that there are `restaurant` and `Restaurant` values, so you need to fix that too. 
 
 
 ```{r clean-more-predictors}
 
-drop_unspc_hemi <- clean_year[!(clean_year$Hemisphere == "Unspecified"), ]
+drop_unspc_hemi <- fix_vomit[!(clean_year$Hemisphere == "Unspecified"), ]
 
 recode_unkn_vars <- drop_unspc_hemi %>% dplyr::mutate(Action1 = recode(Action1, "Unknown" = "Unspecified")) %>% dplyr::mutate(Path1 = recode(Path1, "Unknown" = "Unspecified"))
 
@@ -160,6 +172,8 @@ combined_data$Setting_1 <- NULL
 
 complete_combined_data <- combined_data
 
+droplevels(complete_combined_data)
+
 # write code that performs the actions described above
 # at the end, use the droplevels() command to remove empty factor levels
 ```
@@ -194,11 +208,9 @@ gg_vs_obyear <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = OBYear, col
 
 gg_vs_riskall <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = RiskAll, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
 
-gg_vs_vomit <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Vomit, color = gg2c4)) + geom_violin() + geom_jitter(alpha = 0.25) + theme(legend.position = "none")
-
 grid.arrange(gg_vs_casesall, gg_vs_deaths, gg_vs_hosp, gg_vs_meand1, gg_vs_meani1, nrow = 2)
 
-grid.arrange(gg_vs_mediand1, gg_vs_mediani1, gg_vs_obyear, gg_vs_riskall, gg_vs_vomit, nrow = 2)
+grid.arrange(gg_vs_mediand1, gg_vs_mediani1, gg_vs_obyear, gg_vs_riskall, nrow = 2)
 #write code that produces plots showing our outcome of interest on the x-axis and each numeric predictor on the y-axis.
 #you can use the facet_wrap functionality in ggplot for it, or do it some other way.
 ```
@@ -221,10 +233,12 @@ gg_vs_season <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = season)) + 
 
 gg_vs_tras1 <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Trans1)) + geom_count() 
 
-gg_vs_Setting <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Action1)) + geom_count() 
+gg_vs_Setting <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Setting)) + geom_count() 
+
+gg_vs_vomit <- complete_combined_data %>% ggplot(aes(x = gg2c4, y = Vomit)) + geom_count()
 
 grid.arrange(gg_vs_action1, gg_vs_country, gg_vs_hemi, gg_vs_path1, nrow = 2)
-grid.arrange(gg_vs_season, gg_vs_tras1, gg_vs_Setting, nrow = 2)
+grid.arrange(gg_vs_season, gg_vs_tras1, gg_vs_Setting, gg_vs_vomit, nrow = 2)
 
 
 
@@ -234,6 +248,12 @@ grid.arrange(gg_vs_season, gg_vs_tras1, gg_vs_Setting, nrow = 2)
 You should see from plots or tables that some of the categories are small, e.g. for Action1, the "No" category is very small. Very few entries for a given factor create problems during cross-validation (since we can't have a level show up in the holdout if it wasn't part of the fitting set). So let's look at those factor variables a bit closer and fix as needed.
 
 ```{r, more-factor-check}
+
+factor_subset <- dplyr::select(complete_combined_data, -CasesAll, -Deaths, -Hospitalizations, -MeanD1, -MeanI1, -MedianD1, -MedianI1, -OBYear, -RiskAll)
+
+factor_subset %>%
+  gather(name,value) %>%  
+  count(name, value)   
 #write code that looks at tables/summaries of factors 
 ```
 
@@ -243,8 +263,45 @@ Change things as follows: Remove the observation for which action is _No_, combi
 
 
 ```{r, more-factor-cleaning}
+#Remove "No" observation from Action1
+modify_action1 <- complete_combined_data[!complete_combined_data$Action1 == "No", ]
+
+#Combine countries into Japan/USA/Other
+combine_country <- modify_action1 %>% dplyr::mutate(Country = recode(Country, 
+                                                        "Multiple" = "Other",
+                                                        "Unspecified" = "Other"))
+#Combine Trans1 Waterborne to Environmental
+combine_trans <- combine_country %>% dplyr::mutate(Trans1 = recode(Trans1,
+                                                     "Waterborne" = "Environmental"))
+
+#Change blank season to Unknown-cannot use mutate because blank is a zero-value
+levels(combine_trans$season)[levels(combine_trans$season) == ""] <- "Unknown"
+
+combine_trans$Setting <- as.factor(as.character(combine_trans$Setting))
+
 #write code that does the actions described above
 ```
+
+```{r}
+#Final recheck of factors
+factor_subset_clean <- dplyr::select(combine_trans, -CasesAll, -Deaths, -Hospitalizations, -MeanD1, -MeanI1, -MedianD1, -MedianI1, -OBYear, -RiskAll)
+
+factor_subset_clean %>%
+     gather(name,value) %>%  
+     count(name, value)
+```
+
+```{r}
+#Reorder, rename and final check
+
+combine_trans <- combine_trans[, c(5,1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,17,18)]
+
+model_data <- combine_trans
+
+
+glimpse(model_data) #I had 850 observations until I removed the "No" observation from Action1, is 849 correct? 
+```
+
 
 
 At this step, you should have a dataframe containing 850 observations, and 18 variables: 1 outcome, 9 numeric/integer predictors, and 8 factor variables. There should be no missing values. The outcome, `gg2c4`, should be in the 1st slot.
@@ -269,7 +326,10 @@ Since doing the subset selection below starts getting slow, and because it's a g
 
 ```{r, start-parallel}
 #set the number of cores you want to use. Note that this is actually the number of 'logical processors', which is 2x the number of cores. On a windows machine, the number of cores/logical processors can be found in the task manager. You should only set it to what your computer has (or less). So if your computer has say 4 or 6 cores, you can set it to that, or some lower number. Setting it to a number higher than the cores your computer has doesn't further speed up things, in fact it slows things down.
-ncpu=4;
+
+
+
+ncpu=2;
 #if you don't want to run things in parallel, or don't have multiple cores (unlikely nowadays), 
 #just comment out the line below.
 parallelStartSocket(ncpu, show.info=FALSE) 
@@ -281,9 +341,9 @@ parallelStartSocket(ncpu, show.info=FALSE)
 Some setup settings that are used in various code chunks below. 
 
 ```{r mlr-setup}
-outcome <- d$gg2c4 
+outcome <- model_data$gg2c4 
 outcomename = "gg2c4"
-predictors <- d[,-1]
+predictors <- model_data[,-1]
 npred=ncol(predictors)
 #set sampling method for performance evaluation
 #here, we use 5-fold cross-validation, 5-times repeated
@@ -300,6 +360,9 @@ For accuracy, the simplest null model always predicts the most frequent category
 
 
 ```{r nullmodel-acc}
+
+measureACC("No", model_data$gg2c4)
+
 #write code that computes accuracy for a null model
 #the null model always predicts "No"
 ```
@@ -321,7 +384,7 @@ unifmat=data.frame(variable = rep(0,npred), Accuracy = rep(0,npred))
 # loop over each predictor, build simple dataset with just outcome and that predictor, fit it to a glm/logistic model
 for (nn in 1:npred)
 {
-    unidata = data.frame(gg2c4 = outcome, d[,nn+1] )
+    unidata = data.frame(gg2c4 = outcome, model_data[,nn+1] )
     ## Generate the task, i.e. define outcome and predictors to be fit
     mytask = makeClassifTask(id='unianalysis', data = unidata, target = outcomename, positive = "Yes")
     model = resample(mylearner, task = mytask, resampling = sampling_choice, show.info = FALSE, measures = acc )
@@ -340,7 +403,7 @@ Now let's fit a full logistic model with all predictors.
 ```{r fullfit}
 set.seed(1111) #makes each code block reproducible
 #do full model with Cross-Validation - to get an idea for the amount of over-fitting a full model does
-mytask = makeClassifTask(id='fullanalysis', data = d, target = outcomename, positive = "Yes")
+mytask = makeClassifTask(id='fullanalysis', data = model_data, target = outcomename, positive = "Yes")
 fullmodel = resample(mylearner, task = mytask, resampling = sampling_choice, show.info = FALSE, measures = acc )
 ACC_fullmodel = fullmodel$aggr[1]
 print(ACC_fullmodel)
@@ -409,6 +472,13 @@ Using this approach, a model is evaluated based on the Area under the curve (AUC
 # Model performance with AUC
 
 ```{r nullmodel-auc}
+
+library(modEvA) #I had trouble with the auc function in pROC as I could not figure out how to correctly input the predictor and response syntax without receiving an error. The syntax was easy to use if not applying a null model however.
+
+null_mod = glm(gg2c4 ~ 1, data = model_data, family="binomial")
+
+AUC(null_mod)
+
 #write code that computes AUC for a null model
 #the null model always predicts "No"
 #the auc function in the pROC package is useful
@@ -420,6 +490,26 @@ You should find that the null model has an AUC of 0.5, as expected for a "no inf
 Now we run the single-predictor models again.
 
 ```{r, unifit-auc, warning=FALSE}
+
+set.seed(1111) #makes each code block reproducible
+#set learner/model. this corresponds to a logistic model.
+#mlr calls different models different "learners"
+learner_name = "classif.binomial";
+mylearner = makeLearner(learner_name, predict.type = "prob")
+# this will contain the results
+unifmat=data.frame(variable = rep(0,npred), AUC = rep(0,npred))
+# loop over each predictor, build simple dataset with just outcome and that predictor, fit it to a glm/logistic model
+for (nn in 1:npred)
+{
+    unidata = data.frame(gg2c4 = outcome, model_data[,nn+1] )
+    ## Generate the task, i.e. define outcome and predictors to be fit
+    mytask = makeClassifTask(id='unianalysis', data = unidata, target = outcomename, positive = "Yes")
+    model = resample(mylearner, task = mytask, resampling = sampling_choice, show.info = FALSE, measures = AUC )
+    unifmat[nn,1] = names(predictors)[nn] 
+    unifmat[nn,2] = model$aggr
+}
+kable(unifmat)
+
 #copy and paste the code from above for single predictor fits, but now switch to AUC instead of accuracy.
 ```
 
